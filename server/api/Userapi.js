@@ -3,11 +3,14 @@ var express = require('express');
 var router = express.Router();
 var mysql = require('mysql');
 var $sql = require('../sqlfun');//sql语句
+const jwt= require('jsonwebtoken');
 
 // 连接数据库
 var conn = mysql.createConnection(models.mysql);
 //database open建立连接
 conn.connect();
+
+
 
 
 
@@ -22,12 +25,22 @@ router.post('/login',(req,res)=>{
 		}
 		console.log(results)
 		if (results[0] === undefined) {
-			res.send("-1");  // -1 表示查询不到，用户不存在，即邮箱填写错误
+			res.send({'status':-1});  // -1 表示查询不到，用户不存在，即邮箱填写错误
 		} else{
 			if (results[0].userName == user.username && results[0].userPass == user.password) {
-				res.send("0");  // 0 表示用户存在并且邮箱密码正确
+
+				let content ={name:user.username}; // 要生成token的主题信息
+				let secretOrPrivateKey="suiyi" // 这是加密的key（密钥） 
+				let token = jwt.sign(content, secretOrPrivateKey, {
+						expiresIn: 60*60*1  // 1小时过期
+					});
+					res.send({'status':0,'token':token})
+
+
+			//	res.send("0");  // 0 表示用户存在并且邮箱密码正确
+			
 			} else{
-				res.send("1");  // 1 表示用户存在，但密码不正确
+				res.send({'status':1});  // 1 表示用户存在，但密码不正确
 			}
 		}
 	})
@@ -159,6 +172,10 @@ router.post('/add', (req, res) => {
                           
         });
     });
+
+
+
+
 
 
 module.exports = router;

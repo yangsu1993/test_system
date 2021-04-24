@@ -52,12 +52,15 @@
                 style="width: 100%"
                 max-height="250"
                 max-width="200"
+                
                 >
                 
                 <el-table-column
                 fixed
                 prop="id"
                 label="ユーザーID"
+                 sortable
+               
                 width="120">
                 </el-table-column>
                 <el-table-column
@@ -73,6 +76,7 @@
                 <el-table-column
                 prop="join_date"
                 label="入社年月日"
+                sortable
                 width="120">
                 </el-table-column>
                 <el-table-column
@@ -84,29 +88,34 @@
                  <el-table-column
 
                 label="資格認定日付"
-                width="120"
-               prop="cre_date" 
+                width="140"
+               prop="cre_date"
+                sortable 
                 >
                 </el-table-column>
 
                 <el-table-column
                 prop="bonus_date"
                 label="奨励金日付"
+                 sortable
                 width="120">
                 </el-table-column>
                 <el-table-column
                 label="操作"
-                width="120">
+                :formatter="formatter"
+                width="120"
+                 prop="do" 
+               >
                 <template slot-scope="scope">
                     <el-button
-                    @click.native.prevent="deleteRow(scope.$index, tableData)"
+                    @click.native.prevent="deleteRow(scope.$index,scope.row)"
                     type="text"
                     size="small">
                     削除
                     </el-button>
 
                     <el-button
-                    @click.native.prevent="change_data(scope.$index)"
+                    @click.native.prevent="change_data(scope.$index,scope.row)"
                     type="text"
                     size="small">
                     修正
@@ -123,7 +132,7 @@
 
         <!-- Log out -->
           <div class="go_reg_box">
-          <router-link  to="/">ログアウト</router-link>
+          <el-button @click.native.prevent="token_edit()" >ログアウト</el-button>
 	     </div>
 	</div>
 
@@ -147,6 +156,7 @@
                 get_cre:'',
                 cre_date:'',
                 bonus_date:'',
+                do:'',
 
 		userInfo:{},
 
@@ -174,7 +184,9 @@
         }],
         value: '',
         
-        tableData: []
+        tableData: [],
+
+        
       }
       
       // if(prop!=""){
@@ -191,6 +203,17 @@
     } ,
 	methods:{
 
+       formatter(row, column) {
+         
+        return row.address;
+        
+      },
+
+      token_edit(){
+          localStorage.removeItem('Authorization');
+          this.$router.push('/');
+      },
+
 
             // 削除ボタン
       deleteRow(index, rows) {
@@ -202,7 +225,7 @@
 						method:'post',
 						url: '/api/user/delete_data',
             	data: {
-                id:self.tableData[index].id
+                id:rows.id
               }
 					})	.then( res => {
             	switch(res.data){
@@ -215,25 +238,25 @@
 						console.log(err);
 					})
 
-        
-        rows.splice(index, 1);
-        	
+        this.tableData.splice(index, 1); 	
 
       },
         // 修正ボタン
-    change_data(index) {
+    change_data(index,rows) {
+      	console.log(index);
+        console.log(rows);
         const self = this;
         //传递参数
         this.$router.push({
           name:'change',
           params:{
-            id:self.tableData[index].id,
-            names:self.tableData[index].names,
-            furigana:self.tableData[index].furigana,
-            join_date:self.tableData[index].join_date,
-            get_cre:self.tableData[index].get_cre,
-            cre_date:self.tableData[index].cre_date,
-            bonus_date:self.tableData[index].bonus_date,
+            id:rows.id,
+            names:rows.names,
+            furigana:rows.furigana,
+            join_date:rows.join_date,
+            get_cre:rows.get_cre,
+            cre_date:rows.cre_date,
+            bonus_date:rows.bonus_date,
           }
         });
         
@@ -254,6 +277,9 @@
       this.$router.push('/add');
       
       },
+
+  
+
       //全部表示
       add_all(){
          let self = this;
@@ -318,10 +344,19 @@
         }
 				
 			}
-		}
+		},
 
+     mounted () { 
+       //这个属性就可以，在里面声明初始化时要调用的方法即可
+      // we can implement any method here like
+      this.add_all()
+    }
 
   }
+
+  
+
+
 </script>
 
 <style scoped>

@@ -6,9 +6,14 @@ import New_user from '@/components/text/new'
 import home from '@/components/text/home'
 import add from '@/components/text/data_add'
 import change from '@/components/text/change'
+import axios from 'axios' //引入axios
+
+Vue.prototype.$axios = axios;
+
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
+
   routes: [
     /* {
     //   path: '/',
@@ -37,4 +42,43 @@ export default new Router({
       component: change
     }
   ]
-})
+});
+
+// 导航守卫
+// 使用 router.beforeEach 注册一个全局前置守卫，判断用户是否登陆
+router.beforeEach((to, from, next) => {
+  if (to.path == '/' || to.path == '/register' ) {
+    next();
+  }else {
+     
+    let token = localStorage.Authorization
+    console.log(token);
+ 
+    if (token === undefined || token == '') {
+      alert("no token");
+     // console.log("????????????????????/");
+      next('/');
+    } else {
+      //console.log("！！！！！！！！！！！！！！！");
+      next();
+    }
+  }
+});
+
+// 添加请求拦截器，在请求头中加token
+axios.interceptors.request.use(
+  config => {
+    if (localStorage.getItem('Authorization')) {
+      config.headers.Authorization = localStorage.getItem('Authorization');
+    }
+ 
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
+  });
+
+
+
+export default router;
+

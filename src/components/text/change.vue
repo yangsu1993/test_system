@@ -2,40 +2,66 @@
 	<div class="m_r">
 		<header class="top_bar">
 		    <a onclick="window.history.go(-1)" class="icon_back"></a>
-		    <h3 class="cartname">社員情報修正</h3>
+		    <h3 class="cartname">社員情報新規</h3>
 		</header>
 		<main class="user_login_box">
+				
+
 		    <div class="login_dialog">
-                 <div class="_userid" prop="id_txt">
+
+					<div class="t_box">
+						<div style="margin-top:1%;"></div>
+					<p id="id" class="id_t">*修正不可</p>
+					<div style="margin-top:7%;"></div>
+					<p id="names" class="names_t"></p>
+					<div style="margin-top:6%;"></div>
+					<p id="name_furigana" class="furigana_t"></p>
+					<div style="margin-top:13%;"></div>
+						<p id="join_date" class="furigana_t">*修正不可</p>
+					</div>	
+
+
+                 <div class="_userid">
+					<span style="color:red;">* </span>
 					 ユーザー番号：
-		            <input type="text" name="id"  class="id_text" readonly v-model="id">
-                    <div  class="t_text">* 修正できない項目</div>
+		            <input type="text" name="id" 	:disabled="true" placeholder="数字とアルファベットのみ"  class="id"  v-model="id"  maxlength="15" >
+					
 		        </div>
                 <div style="margin-top:2%;"></div>
 		        <div class="_username">
+					<span style="color:red;">* </span>
 					名前：
-		            <input type="text" name="names" placeholder="名前" class="names" v-model="names">
+		            <input type="text" name="names" placeholder="名前" class="names" v-model="names"  v-on:input="check_word($event)" maxlength="15">
+					
 		        </div>
 				<div style="margin-top:2%;"></div>
-                 <div class="furigana">
+                 <div class="_username_furigana">
+					 <span style="color:red;">* </span>
 					 フリガナ：
-		            <input type="text" name="furigana" placeholder="フリガナのみ" class="furigana" v-model="furigana">
+		            <input type="text" name="name_furigana" placeholder="カタカナ" class="name_furigana" v-on:input="check_word($event)" v-model="name_furigana">
+				
 		        </div>
 						<div style="margin-top:2%;"></div>
 						
-					  <div class="block1">
-						<span class="demonstration" >入社年月日：</span>
-						<el-date-picker class="join_date"
-                        readonly
+				 <div class="block1">
+						<span class="demonstration">
+							<span style="color:red;">* </span>
+							入社年月日：</span>
+						<el-date-picker class="join_date" 
 						v-model="join_date"
-						align="right"
 						type="date"
+						name="join_date"
+						:disabled="true"
 						placeholder="日付を選択"
-						>
+						:picker-options="pickerOptions">
 						</el-date-picker>
 					</div>
 
-				<div style="margin-top:5%;"></div>
+				
+			
+				
+
+				<div style="margin-top:7%;"></div>
 				 <div class="_get_cre">
 					 資格：
 		            <input type="text" name="get_cre" placeholder="資格" class="get_cre" v-model="get_cre">
@@ -44,28 +70,28 @@
 
 
 
-					 <div class="_cre_date">
+					 <div class="block2">
 						<span class="demonstration">資格獲得日付：</span>
 						<el-date-picker class="cre_date"
 						v-model="cre_date"
 						align="right"
 						type="date"
 						placeholder="日付を選択"
-						>
+						:picker-options="pickerOptions">
 						</el-date-picker>
 					</div>
 
-				<div style="margin-top:4%;"></div>
+				<div style="margin-top:6%;"></div>
 
 
-						 <div class="_bonus_date">
-						<span class="demonstration">資格獲得日付：</span>
+						 <div class="block3">
+						<span class="demonstration">ボーナス獲得日付：</span>
 						<el-date-picker class="bonus_date"
 						v-model="bonus_date"
 						align="right"
 						type="date"
 						placeholder="日付を選択"
-						>
+						:picker-options="pickerOptions">
 						</el-date-picker>
 					</div>
 		        
@@ -73,38 +99,54 @@
 		            <button @click="pushIn()" class="btn_login">提出</button>
 					 <router-link  to="/home" class="edit_box">戻る</router-link>
 		        </div>
+				
 		    </div>
 		</main>
 	</div>
 </template>
+
+
+
+
+
+
 <script>
 
 	export default{
 		data(){
-			return{				
+			return{		
+
+						pickerOptions: {
+						disabledDate(time) {
+							return time.getTime() > Date.now();
+						},
+						},
+				
+
 				id:'',
 				names:'',
-                furigana:'',
+                name_furigana:'',
 				join_date:'',
 				get_cre:'',
 				cre_date:'',
 				bonus_date:'',
 				regInfo:{},
-			rules:{
-				id_txt: [
-            { required: true, message: '请输入活动名称', trigger: 'blur' },
-            { min: 3, max: 10, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-          ],
-				}
+	
+				
 			}
 			
 		},
 		methods:{
 			pushIn(){
 				const self = this;
-				if(self.id!=0 && self.names!=0 && self.furigana!=0 && self.join_date!=0){
+				if(self.id!=0 && self.names!=0 && self.name_furigana!=0 && self.join_date!=null){
 					if(self.get_cre!=0&&self.cre_date!=0 || self.get_cre==0&&self.cre_date==0){
-					
+						if(self.cre_date==null){
+							self.cre_date=""
+						}
+						if(self.bonus_date==null){
+							self.bonus_date=""
+						}
 													
 						self.$axios({
 						method:'post',
@@ -112,7 +154,7 @@
 						data: {
 							id: self.id,
 							names: self.names,
-							furigana:self.furigana,
+							furigana:self.name_furigana,
 							join_date:self.join_date,
 							get_cre:self.get_cre,
 							cre_date:self.cre_date,
@@ -139,6 +181,57 @@
 				}
 				
 			},
+
+			
+			check_word(n){
+			//提示栏内容
+			var y = n.currentTarget.name;
+			//输入栏内容
+			var x =  n.currentTarget.value;
+			
+			 if(x==""){ document.getElementById(y).innerHTML = "*空欄不可"}else{
+				 
+				//  if(y=="id"){
+				// 	 	 //console.log((/[\u2E80-\uFE4F]+/).test(x));
+				// 	 if((/[\u2E80-\uFE4F]+/).test(x)){
+				// 		 document.getElementById(y).innerHTML = "*全角不可"
+				// 		  //console.log(y);
+				// 	 }else{
+						
+				// 		 document.getElementById(y).innerHTML = ""
+
+				// 	 } 
+				//  }
+
+				  if(y=="names"){
+					 	 console.log((/\u0000-\u00ff]+/).test(x));
+						  // console.log(y);
+						   //非半角+非片假名+非各种字符+非小写全角英文
+					 if((/[\u0000-\u00ff]+/).test(x)||(/[\u30A1-\u3229]+/).test(x)||(/[\u3000-\u3017]+/).test(x)
+					 ||(/[\uFF01-\uFF20]+/).test(x)||(/[\uFF3B-\uFFE5]+/).test(x)){
+						 document.getElementById(y).innerHTML = "*半角・記号・カタカナ・こもじ英文不可"
+						  //console.log(y);
+					 }else{
+						 document.getElementById(y).innerHTML = ""
+					 } 
+				 }
+
+				  if(y=="name_furigana"){
+					 	 console.log((/\u0000-\u00ff]+/).test(x));
+						 //  console.log(y);
+						   //カタカナのみ
+					 if((/[\u0000-\u00ff]+/).test(x)||(/[\u00A4 -\u3093]+/).test(x)||(/[\u3105-\uFFE5]+/).test(x)
+					){
+						 document.getElementById(y).innerHTML = "*半角・記号・平仮名・漢字不可"
+						  //console.log(y);
+					 }else{
+						 document.getElementById(y).innerHTML = ""
+					 } 
+				 }
+				 	
+
+	}
+			 }
 		// 	//時間の判断
 		// isDate(date){
 		// 	var arr =date.split("-");
@@ -160,7 +253,7 @@
         created(){
             this.id = this.$route.params.id;
             this.names = this.$route.params.names;
-            this.furigana = this.$route.params.furigana;
+            this.name_furigana = this.$route.params.furigana;
             this.join_date = this.$route.params.join_date;
             this.get_cre = this.$route.params.get_cre;
             this.cre_date = this.$route.params.cre_date;
@@ -194,7 +287,7 @@
 			background: white  url(https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1984620042,2404712648&fm=26&gp=0.jpg) no-repeat;
 		background-size: 100% 100%;
 	}
-.id,.cre_date,.names,.furigana,.join_date,.get_cre,.bonus_date{
+.cre_date,.password_input,.password_again,.join_date,.names,.name_furigana,.get_cre,.bonus_date{
 
 	width: 60%;
 	font-size: 80%;
@@ -202,6 +295,29 @@
 	right: 2%;
 	
 }
+
+.id{
+	/* background:rgb(219, 219, 219); */
+	width: 60%;
+	font-size: 80%;
+	position: absolute;
+	right: 2%;
+	top: 1%;
+	/* border:rgb(126, 126, 126); */
+	
+}
+
+/* .eara1{
+	background:rgb(151, 151, 151);
+	opacity:0.4;
+	width: 60%;
+	height: 10%;
+	font-size: 80%;
+	position: absolute;
+	top: 25.7%;
+	right: 2%;
+	
+} */
 
 .btn_login{
 
@@ -213,27 +329,30 @@
 	transform: translate(-50%,-50%);
 }
 .edit_box{
-   
 	position: absolute;
 	top: 90%;
 	left: 80%;
 	transform: translate(-50%,-50%);
 }
 
-.id_text{
-     width:30%;
-    background:rgb(212, 212, 212);
-    position: absolute;
-	top: 2%;
-	left: 36%;
+.t_box{
+		width: 60%;
+    height: 200%;
+		/* background: green; */
+		position: absolute;
+	 top: 2%;
+	left: 38%;
 }
-    .t_text{
-    font-size: 70%;
-    color: red;
-    position: absolute;
-	top: 2%;
-	left: 70%;
 
-    }
+.id_t,.names_t,.furigana_t,.join_date_t{
+		/* background: green; */
+	font-size: 80%;
+	color: red;
+
+	width: 60%;
+    height: 2%;
+
+
+}
 
 </style>
