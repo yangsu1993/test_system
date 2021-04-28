@@ -1,47 +1,53 @@
 <template>
-	<div class="m_r">
+		
+
+	
+		<div class="background">
+    	
+		
+			
 		<header class="top_bar">
 		    <a onclick="window.history.go(-1)" class="icon_back"></a>
 		    <h3 class="cartname">社員情報新規</h3>
+		<button @click="jump()" class="jbtn">戻る</button>
+		<button @click="edit()" class="ebtn">ログアウト</button>
 		</header>
+		
+
+
 		<main class="user_login_box">
 				
 
 		    <div class="login_dialog">
+				
+					
+					<div class="eara1">
 
-					<div class="t_box">
-						<div style="margin-top:1%;"></div>
-					<p id="id" class="id_t">*修正不可</p>
-					<div style="margin-top:7%;"></div>
-					<p id="names" class="names_t"></p>
-					<div style="margin-top:6%;"></div>
-					<p id="name_furigana" class="furigana_t"></p>
-					<div style="margin-top:13%;"></div>
-						<p id="join_date" class="furigana_t">*修正不可</p>
-					</div>	
+							<div class="_userid">
 
-
-                 <div class="_userid">
 					<span style="color:red;">* </span>
 					 ユーザー番号：
-		            <input type="text" name="id" 	:disabled="true" placeholder="数字とアルファベットのみ"  class="id"  v-model="id"  maxlength="15" >
-					
+		            <input type="text" name="id"  placeholder="数字とアルファベットのみ" class="id" v-on:input="check_word($event)" v-model="id"  maxlength="7"   :disabled="true">
 		        </div>
-                <div style="margin-top:2%;"></div>
+				<p id="id" class="id_t">*修正不可</p>
+					<div style="margin-top:10%;"></div>
+
 		        <div class="_username">
 					<span style="color:red;">* </span>
 					名前：
-		            <input type="text" name="names" placeholder="名前" class="names" v-model="names"  v-on:input="check_word($event)" maxlength="15">
+		            <input type="text" name="names" placeholder="漢字とひらがな/アルファベット" class="names" v-model="names"  v-on:input="check_word($event)" maxlength="15">
 					
 		        </div>
-				<div style="margin-top:2%;"></div>
+				<p id="names" class="names_t"></p>	
+				<div style="margin-top:10%;"></div>
                  <div class="_username_furigana">
 					 <span style="color:red;">* </span>
 					 フリガナ：
-		            <input type="text" name="name_furigana" placeholder="カタカナ" class="name_furigana" v-on:input="check_word($event)" v-model="name_furigana">
+		            <input type="text" name="name_furigana" placeholder="カタカナ(15位以内)" class="name_furigana" v-on:input="check_word($event)" v-model="name_furigana" maxlength="15">
 				
 		        </div>
-						<div style="margin-top:2%;"></div>
+				<p id="name_furigana" class="furigana_t"></p>	
+						<div style="margin-top:10%;"></div>
 						
 				 <div class="block1">
 						<span class="demonstration">
@@ -49,42 +55,49 @@
 							入社年月日：</span>
 						<el-date-picker class="join_date" 
 						v-model="join_date"
-						type="date"
-						name="join_date"
-						:disabled="true"
-						placeholder="日付を選択"
-						:picker-options="pickerOptions">
-						</el-date-picker>
-					</div>
-
-				
-			
-				
-
-				<div style="margin-top:7%;"></div>
-				 <div class="_get_cre">
-					 資格：
-		            <input type="text" name="get_cre" placeholder="資格" class="get_cre" v-model="get_cre">
-		        </div>
-				<div style="margin-top:2%;"></div>
-
-
-
-					 <div class="block2">
-						<span class="demonstration">資格獲得日付：</span>
-						<el-date-picker class="cre_date"
-						v-model="cre_date"
 						align="right"
 						type="date"
 						placeholder="日付を選択"
+						 format="yyyy-MM-dd"
+						 :disabled="true"
+						 :picker-options="pickerOptions"
+						
+						>
+						</el-date-picker>
+					</div>
+						<p id="join_date" class="joindate_t">*修正不可</p>
+
+					</div>
+                 
+
+				<div class="eara2">
+					 <div class="_get_cre">
+					 資格：
+		            <input  type="text" name="get_cre" placeholder="資格"  class="get_cre" v-model="get_cre" v-on:input="cre_check($event)" >
+		        </div>
+				<p id=" get_cre" class="getcre_t"></p>
+				<div style="margin-top:10%;"></div>
+
+
+
+					 <div class="_cre_date">
+						<span class="demonstration">資格獲得日付：</span>
+						<el-date-picker class="cre_date"
+						v-model="cre_date"
+					
+						align="right"
+						type="date"
+						placeholder="日付を選択"
+						v-on:input="date_check()"
+						:disabled="disabled"
 						:picker-options="pickerOptions">
 						</el-date-picker>
 					</div>
+						<p id="cre_date" class="credate_t"></p>
+				<div style="margin-top:10%;"></div>
 
-				<div style="margin-top:6%;"></div>
 
-
-						 <div class="block3">
+						 <div class="_bonus_date">
 						<span class="demonstration">ボーナス獲得日付：</span>
 						<el-date-picker class="bonus_date"
 						v-model="bonus_date"
@@ -94,16 +107,24 @@
 						:picker-options="pickerOptions">
 						</el-date-picker>
 					</div>
+
+				</div>
+				
 		        
 		        <div class="login_box">
-		            <button @click="pushIn()" class="btn_login">提出</button>
-					 <router-link  to="/home" class="edit_box">戻る</router-link>
+		            <button @click="pushIn()" class="btn">提出</button>
+					 <!-- <router-link  to="/home" class="edit_box">戻る</router-link> -->
 		        </div>
+
+				
+
 				
 		    </div>
 		</main>
 	</div>
 </template>
+
+
 
 
 
@@ -131,12 +152,32 @@
 				cre_date:'',
 				bonus_date:'',
 				regInfo:{},
+					disabled:true,
 	
 				
 			}
 			
 		},
 		methods:{
+			jump(){
+          this.$router.push('/home');
+      },
+	  	edit(){
+			  localStorage.removeItem('Authorization');
+          this.$router.push('/');
+      },
+	  	  		  
+  stringChange(word){
+			
+			//var rr = word.toString().replace(/'/g, "''");
+				
+                var tt = word.toString().trim();
+            	var yy = tt.toString().replace( /\s+/g, "　");
+				   return yy;
+	  },
+	  		  
+		
+	
 			pushIn(){
 				const self = this;
 				if(self.id!=0 && self.names!=0 && self.name_furigana!=0 && self.join_date!=null){
@@ -152,11 +193,13 @@
 						method:'post',
 						url: '/api/user/update',
 						data: {
-							id: self.id,
-							names: self.names,
-							furigana:self.name_furigana,
-							join_date:self.join_date,
-							get_cre:self.get_cre,
+							
+
+							id: this.stringChange(self.id),
+							names: this.stringChange(self.names),
+							furigana:this.stringChange(self.name_furigana),
+							join_date:this.stringChange(self.join_date),
+							get_cre:this.stringChange(self.get_cre),
 							cre_date:self.cre_date,
 							bonus_date:self.bonus_date
 						}
@@ -164,22 +207,71 @@
 					.then( res => {
 						switch(res.data){
 							case 0:
-								alert("更新された");
+								 this.$message({
+										type: 'success',
+										message: '更新された'
+									}); 
+							//	alert("更新された");
 								this.$router.push("/home")
 								break;
 						}
 					})
 					.catch( err => {
+							 this.$message({
+										type: 'error',
+										message: 'エラーが発生しました。システム管理者にご連絡ください'
+									}); 
+
 						console.log(err);
 					})
 					
 				}else{
-					alert("資格情報を書き終わらない");	
+					 this.$message({
+										type: 'warning',
+										message: '資格情報を書き終わらない'
+									}); 
+				//	alert("資格情報を書き終わらない");	
 				}			
 				}else{
-						alert("空いている項目がある");
+					 this.$message({
+										type: 'warning',
+										message: '空いている項目がある'
+									}); 
+					//	alert("空いている項目がある");
 				}
 				
+			},
+
+				cre_check(n){
+
+			//输入栏内容
+			var x =  n.currentTarget.value;
+			if(x!=""){
+					//console.log("???"+this.cre_date);
+				
+						
+							document.getElementById("cre_date").innerHTML = "*空欄不可";
+						
+						    this.disabled=false
+				
+					
+			}else{
+				document.getElementById("cre_date").innerHTML = "";
+				this.cre_date=""
+				this.disabled=true
+			}
+
+			},
+
+			date_check(){
+			
+				if(this.cre_date ==""||this.cre_date ==null ){
+						document.getElementById("cre_date").innerHTML = "*空欄不可";
+						//console.log("!!!!!!!!!!!"+this.cre_date);
+				}else{
+						document.getElementById("cre_date").innerHTML = "";
+				}
+
 			},
 
 			
@@ -232,22 +324,7 @@
 
 	}
 			 }
-		// 	//時間の判断
-		// isDate(date){
-		// 	var arr =date.split("-");
-		// 	if(arr.length==3){
-		// 		let tim = new Date.
-		// 		if(arr[0].length==4&&arr[0]<=Calendar.YEAR){
-		// 		if(arr[1].length==2){
-		// 			if(arr[2].length==2){
-		// 				return true;
 
-		// 			}
-		// 		}
-		// 		}
-		// 	}
-		// 		return false;
-		// }
 		},
         //进入页面加载的方法
         created(){
@@ -258,6 +335,9 @@
             this.get_cre = this.$route.params.get_cre;
             this.cre_date = this.$route.params.cre_date;
             this.bonus_date = this.$route.params.bonus_date;
+			if(this.get_cre!=""){
+					this.disabled=false;
+			}
         
 
         }
@@ -269,57 +349,70 @@
 
 </script>
 
+    
+
 <style scoped>
 
+	.background{
+	width:1900px;
+	height:950px ;
+  /**宽高100%是为了图片铺满屏幕 */
+   
+	background: white url("../../assets/yun.png") repeat;
+    position: absolute;
+	/* opacity: 0.7; */
+}
+        
+
 	.user_login_box{
-		font-family: Georgia, 'Times New Roman', Times, serif;
-		box-shadow:10px 10px 10px grey;
-		font-size: 110%;
-		width: 45%;
-		height: 60%;
-		color: black;
-		font-weight:900;
-
-		position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%,-50%);
-			background: white  url(https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1984620042,2404712648&fm=26&gp=0.jpg) no-repeat;
-		background-size: 100% 100%;
+	background:  white url("../../assets/frame.png") no-repeat;
+	background-size:  100%;
+	 /* box-shadow:10px 10px 10px gray; */
+	width: 1200px;
+	height: 652px;
+	position:relative;
+	
+	left: 350px;
+	font-size: 25px;
 	}
-.cre_date,.password_input,.password_again,.join_date,.names,.name_furigana,.get_cre,.bonus_date{
 
-	width: 60%;
-	font-size: 80%;
+
+.eara1{
+	width:50%;
+
+  /* background: red; */
+	position:relative;
+	top: 150px;
+	left: 20px;
+
+}
+
+
+.eara2{
+	width:47%;
+
+   /* background: red; */
+	position:relative;
+	top: -180px;
+	left: 620px;
+
+}
+
+
+
+
+
+.id,.cre_date,.password_input,.password_again,.names,.name_furigana,.join_date,.get_cre,.bonus_date{
+
+	width: 300px;
+	height:30px;
+	font-size: 20px;
 	position: absolute;
-	right: 2%;
+	right: 7%;
 	
 }
 
-.id{
-	/* background:rgb(219, 219, 219); */
-	width: 60%;
-	font-size: 80%;
-	position: absolute;
-	right: 2%;
-	top: 1%;
-	/* border:rgb(126, 126, 126); */
-	
-}
-
-/* .eara1{
-	background:rgb(151, 151, 151);
-	opacity:0.4;
-	width: 60%;
-	height: 10%;
-	font-size: 80%;
-	position: absolute;
-	top: 25.7%;
-	right: 2%;
-	
-} */
-
-.btn_login{
+/* .btn_login{
 
     width: 20%;
     height: 10%;
@@ -327,32 +420,116 @@
 	top: 90%;
 	left: 50%;
 	transform: translate(-50%,-50%);
-}
-.edit_box{
+} */
+
+
+.btn{
+	width: 160px;
+	height: 80px;
+	background:  white url("../../assets/btn.png") no-repeat;
+	background-size:  100%;
+	font-size: 30px;
+	border:none;
+	color: white;
+	text-shadow:-5px -5px 5px rgb(139, 6, 6);
 	position: absolute;
-	top: 90%;
-	left: 80%;
+	/* left: 200px; */
+	top: 450px;
+	left: 800px;
+}
+
+
+
+.jbtn{
+	width: 160px;
+	height: 80px;
+	background:   url("../../assets/btn.png") no-repeat;
+	background-size:  100%;
+	font-size: 30px;
+	border:none;
+	color: white;
+	text-shadow:-5px -5px 5px rgb(139, 6, 6);
+
+}
+
+.btn:hover,.jbtn:hover{
+	font-size: 40px;
+}
+
+
+
+.ebtn{
+	width: 180px;
+	height: 80px;
+	background:   url("../../assets/btn.png") no-repeat;
+	background-size:  100%;
+	font-size: 24px;
+	border:none;
+	color: white;
+	text-shadow:-5px -5px 5px rgb(139, 6, 6);
+	position: absolute;
+	/* left: 200px; */
+	top: 200px;
+	left: 0px;
+}
+
+
+.ebtn:hover{
+	font-size: 32px;
+}
+
+
+
+.id_t,.names_t,.furigana_t,.joindate_t,.getcre_t,.credate_t{
+		color: red;
+		font-size: 70%;
+	width: 100%;
+    height: 2%;
+	position: absolute;
+
+	left: 92%;
 	transform: translate(-50%,-50%);
+
 }
 
-.t_box{
-		width: 60%;
-    height: 200%;
-		/* background: green; */
-		position: absolute;
-	 top: 2%;
-	left: 38%;
-}
-
-.id_t,.names_t,.furigana_t,.join_date_t{
-		/* background: green; */
-	font-size: 80%;
+/* 
+.getcre_t{
 	color: red;
-
+	font-size: 70%;
 	width: 60%;
     height: 2%;
+	position: absolute;
+	top: 52%;
+	left: 25%;
+	transform: translate(-50%,-50%);
+}
+.credate_t{
+	color: red;
+	font-size: 70%;
+	width: 60%;
+    height: 2%;
+	position: absolute;
+	top: 67%;
+	left: 25%;
+	transform: translate(-50%,-50%);
+} */
 
+.login_dialog{
+	height: 100%;
+	 /* background: green;  */
+}
+
+
+
+
+	.cartname{
+   background: rgb(182, 1, 1); 
+   font-size: 200%;
+   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+   color: white;
 
 }
+
+
 
 </style>

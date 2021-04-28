@@ -8,9 +8,14 @@ import add from '@/components/text/data_add'
 import change from '@/components/text/change'
 import axios from 'axios' //引入axios
 
+import { Message } from "element-ui"
+// Vue.use(Message)
+
+Vue.prototype.$message = Message;
 Vue.prototype.$axios = axios;
 
 Vue.use(Router)
+let v = new Vue();
 
 const router = new Router({
 
@@ -52,14 +57,19 @@ router.beforeEach((to, from, next) => {
   }else {
      
     let token = localStorage.Authorization
-    console.log(token);
+    //console.log(token);
  
     if (token === undefined || token == '') {
-      alert("no token");
-     // console.log("????????????????????/");
+      //alert("no token");
+
+      v.$message({
+        type: 'error',
+        message: '先にログインしてください'
+      }); 
+     
       next('/');
     } else {
-      //console.log("！！！！！！！！！！！！！！！");
+      
       next();
     }
   }

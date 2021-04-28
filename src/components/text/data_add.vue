@@ -9,7 +9,8 @@
 		<header class="top_bar">
 		    <a onclick="window.history.go(-1)" class="icon_back"></a>
 		    <h3 class="cartname">社員情報新規</h3>
-		
+		<button @click="jump()" class="jbtn">戻る</button>
+		<button @click="edit()" class="ebtn">ログアウト</button>
 		</header>
 		
 
@@ -18,38 +19,35 @@
 				
 
 		    <div class="login_dialog">
-					<div class="t_box">
-					<p id="id" class="id_t"></p>
-					<p id="names" class="names_t"></p>			
-					<p id="name_furigana" class="furigana_t"></p>				
-					<p id="join_date" class="joindate_t"></p>
-					<p id=" get_cre" class="getcre_t"></p>
-					<p id="cre_date" class="credate_t"></p>
-					</div>	
+				
 					
+					<div class="eara1">
 
-                 <div class="_userid">
+							<div class="_userid">
 
 					<span style="color:red;">* </span>
 					 ユーザー番号：
 		            <input type="text" name="id"  placeholder="数字とアルファベットのみ" class="id" v-on:input="check_word($event)" v-model="id"  maxlength="7" >
-					
 		        </div>
-                <div class="eara1"></div>
+				<p id="id" class="id_t"></p>
+					<div style="margin-top:10%;"></div>
+
 		        <div class="_username">
 					<span style="color:red;">* </span>
 					名前：
-		            <input type="text" name="names" placeholder="漢字とひらがな/アルファベットのみ" class="names" v-model="names"  v-on:input="check_word($event)" maxlength="15">
+		            <input type="text" name="names" placeholder="漢字とひらがな/アルファベット" class="names" v-model="names"  v-on:input="check_word($event)" maxlength="15">
 					
 		        </div>
-				<div style="margin-top:5%;"></div>
+				<p id="names" class="names_t"></p>	
+				<div style="margin-top:10%;"></div>
                  <div class="_username_furigana">
 					 <span style="color:red;">* </span>
 					 フリガナ：
-		            <input type="text" name="name_furigana" placeholder="カタカナ(17位以内)" class="name_furigana" v-on:input="check_word($event)" v-model="name_furigana" maxlength="17">
+		            <input type="text" name="name_furigana" placeholder="カタカナ(15位以内)" class="name_furigana" v-on:input="check_word($event)" v-model="name_furigana" maxlength="15">
 				
 		        </div>
-						<div style="margin-top:5%;"></div>
+				<p id="name_furigana" class="furigana_t"></p>	
+						<div style="margin-top:10%;"></div>
 						
 				 <div class="block1">
 						<span class="demonstration">
@@ -66,13 +64,18 @@
 						>
 						</el-date-picker>
 					</div>
+						<p id="join_date" class="joindate_t"></p>
 
-				<div style="margin-top:7%;"></div>
-				 <div class="_get_cre">
+					</div>
+                 
+
+				<div class="eara2">
+					 <div class="_get_cre">
 					 資格：
-		            <input  type="text" name="get_cre" placeholder="資格"  class="get_cre" v-model="get_cre" v-on:input="cre_check($event)" >
+		            <input  type="text" name="get_cre" placeholder="資格(20桁以内)"  class="get_cre" v-model="get_cre" v-on:input="cre_check($event)"   maxlength="20">
 		        </div>
-				<div style="margin-top:5%;"></div>
+				<p id=" get_cre" class="getcre_t"></p>
+				<div style="margin-top:10%;"></div>
 
 
 
@@ -84,13 +87,14 @@
 						align="right"
 						type="date"
 						placeholder="日付を選択"
+						 format="yyyy-MM-dd"
 						v-on:input="date_check()"
 						:disabled="disabled"
 						:picker-options="pickerOptions">
 						</el-date-picker>
 					</div>
-
-				<div style="margin-top:7%;"></div>
+						<p id="cre_date" class="credate_t"></p>
+				<div style="margin-top:10%;"></div>
 
 
 						 <div class="_bonus_date">
@@ -100,13 +104,17 @@
 						align="right"
 						type="date"
 						placeholder="日付を選択"
+						 format="yyyy-MM-dd"
 						:picker-options="pickerOptions">
 						</el-date-picker>
 					</div>
+
+				</div>
+				
 		        
 		        <div class="login_box">
-		            <button @click="pushIn()" class="btn_login">提出</button>
-					 <router-link  to="/home" class="edit_box">戻る</router-link>
+		            <button @click="pushIn()" class="btn" :disabled="btnDisabled">提出</button>
+					 <!-- <router-link  to="/home" class="edit_box">戻る</router-link> -->
 		        </div>
 
 				
@@ -141,10 +149,14 @@
 				cre_date:'',
 				bonus_date:'',
 				disabled:true,
+			btnDisabled:false,
+				
 				regInfo:{}
 			}
 		},
 		  mounted () { 
+
+			  
        //这个属性就可以，在里面声明初始化时要调用的方法即可
       // we can implement any method here like
 			const nowDate = new Date();
@@ -160,18 +172,39 @@
 
 	//   var myDate = new Date();
     //   this.join_date=myDate.getDate()
-    }, created(){
+    },
+		
+		
+	
+	created(){
             this.id = "TJ";
         },
 		methods:{
 
+			jump(){
+          this.$router.push('/home');
+      },
+	  	edit(){
+			  localStorage.removeItem('Authorization');
+          this.$router.push('/');
+      },
+	  stringChange(word){
+			
+			//var rr = word.toString().replace(/'/g, "''");
 				
+                var tt = word.toString().trim();
+            	var yy = tt.toString().replace( /\s+/g, "　");
+				   return yy;
+	  },
+	  		  
+	
 		
 			
 			pushIn(){
 				const self = this;
-				if(self.id.substring(2,7)!=0 && self.names!=0 && self.name_furigana!=0 && self.join_date!=null){
-					if(self.get_cre!=0&&self.cre_date!=0 || self.get_cre==0&&self.cre_date==0){
+				 console.log( this.stringChange(self.id));
+				if(self.id.substring(2,7)!="" && self.names!="" && self.name_furigana!="" && self.join_date!=null){
+					if(self.get_cre!=""&&self.cre_date!="" || self.get_cre==""&&self.cre_date==""){
 						//ユーザーidの半角判断(半角+非全角+非全角字符)
 							//仮名の判断（片假名+非半角+非平假名+非中文+非全角+非全角記号）
 
@@ -181,44 +214,88 @@
 					if(document.getElementById("names").innerHTML == ""){
 							//仮名の判断	
 					if(document.getElementById("name_furigana").innerHTML == ""){
+						 
+						
 						self.$axios({
 						method:'post',
 						url: '/api/user/push',
 						data: {
-							id: self.id,
-							names: self.names,
-							name_furigana:self.name_furigana,
+							id: this.stringChange(self.id),
+							names: this.stringChange(self.names),
+							name_furigana:this.stringChange(self.name_furigana),
 							join_date:self.join_date,
-							get_cre:self.get_cre,
+							get_cre:this.stringChange(self.get_cre),
 							cre_date:self.cre_date,
 							bonus_date:self.bonus_date
 						}
 					})
 					.then( res => {
+						
+						
+							
 						switch(res.data){
 							case 0:
-								alert("新規された");
+							
+							self.btnDisabled=true;
+									
+									  this.$message({
+										type: 'success',
+										message: '新規された'
+									}); 
+								//alert("新規された");
 								this.$router.push("/home")
 								break;
+
 							case -1:
+							
+								if(self.btnDisabled==true){
+
+									  this.$message({
+										type: 'error',
+										message: '連打禁止'
+									}); 
+									//alert("連打禁止");
+
+								}else{
+									document.getElementById("id").innerHTML = "*ユーザー名もう存在している"
+								}
 								
-								document.getElementById("id").innerHTML = "*ユーザー名もう存在している"
-								break;
+								
+								
+								break;	
 						}
 					})
 					.catch( err => {
-						console.log(err);
+						  this.$message({
+										type: 'error',
+										message: 'エラーが発生しました。システム管理者にご連絡ください'
+									}); 
+						//	alert("エラーが発生しました。システム管理者にご連絡ください");
+							console.log(err);
 					})
 
 					}else{
-								alert("正しいカタカナは誤入力");
+						  this.$message({
+										type: 'warning',
+										message: '正しいカタカナは誤入力'
+									}); 
+								//alert("正しいカタカナは誤入力");
 						}
 					}else{
-						alert("正しい名前は誤入力");
+
+						  this.$message({
+										type: 'warning',
+										message: '正しい名前は誤入力'
+									}); 
+						//alert("正しい名前は誤入力");
 					}	
 					}else{
-								alert("ユーザー番号は誤入力");
-									//console.log(document.getElementById("id").innerHTML);
+						 this.$message({
+										type: 'warning',
+										message: 'ユーザー番号は誤入力'
+									}); 
+							//	alert("ユーザー番号は誤入力");
+									
 						}
 					
 
@@ -434,48 +511,54 @@
         
 
 	.user_login_box{
-		font-family: Georgia, 'Times New Roman', Times, serif;
-		box-shadow:30px 30px 30px grey;
+	background:  white url("../../assets/frame.png") no-repeat;
+	background-size:  100%;
+	 /* box-shadow:10px 10px 10px gray; */
+	width: 1200px;
+	height: 652px;
+	position:relative;
 	
-		font-size: 30px;
-		width: 700px;
-		height: 700px;
-		color: black;
-		font-weight:900;
-		z-index: 0;
-			 overflow: hidden;
-		 position: relative;	
-			left: 400px;
-			
-			/* background: white  url(https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1984620042,2404712648&fm=26&gp=0.jpg) no-repeat; */
-		background-size: 100% 100%;
+	left: 350px;
+	font-size: 25px;
 	}
 
-.user_login_box::before{
-	 content:'';
-    position:absolute;  /* 固定模糊层位置 */
-    top:0;
-    left:0;
-    right:0;
-    bottom:0;
-   	background: white  url("../../assets/yun.png") repeat;/* 与上面的 bg 中的background设置一样 */
-    filter:blur(5px) contrast(.8);  /* 值越大越模糊 */
-    z-index:-1;  /* 模糊层在最下面 */
+
+.eara1{
+	width:50%;
+
+  /* background: red; */
+	position:relative;
+	top: 150px;
+	left: 20px;
+
 }
+
+
+.eara2{
+	width:47%;
+
+   /* background: red; */
+	position:relative;
+	top: -180px;
+	left: 620px;
+
+}
+
+
+
 
 
 .id,.cre_date,.password_input,.password_again,.names,.name_furigana,.join_date,.get_cre,.bonus_date{
 
-	width: 60%;
-	height:5%;
-	font-size: 80%;
+	width: 300px;
+	height:30px;
+	font-size: 20px;
 	position: absolute;
-	right: 2%;
-
+	right: 7%;
 	
 }
 
-.btn_login{
+/* .btn_login{
 
     width: 20%;
     height: 10%;
@@ -483,65 +566,81 @@
 	top: 90%;
 	left: 50%;
 	transform: translate(-50%,-50%);
-}
-.edit_box{
-		 /* background: green;  */
+} */
+
+
+.btn{
+	width: 160px;
+	height: 80px;
+	background:  white url("../../assets/btn.png") no-repeat;
+	background-size:  100%;
+	font-size: 30px;
+	border:none;
+	color: white;
+	text-shadow:-5px -5px 5px rgb(139, 6, 6);
 	position: absolute;
-	top: 90%;
-	left: 80%;
-	transform: translate(-50%,-50%);
+	/* left: 200px; */
+	top: 450px;
+	left: 800px;
 }
 
-.t_box{
-		width: 60%;
-    height: 100%;
-		 /* background: green;  */
-		position: absolute;
-	 top: 1%;
-	left: 38%;
+
+
+.jbtn{
+	width: 160px;
+	height: 80px;
+	background:   url("../../assets/btn.png") no-repeat;
+	background-size:  100%;
+	font-size: 30px;
+	border:none;
+	color: white;
+	text-shadow:-5px -5px 5px rgb(139, 6, 6);
+
 }
 
-.id_t{
-	color: red;
+.btn:hover,.jbtn:hover{
+	font-size: 40px;
+}
+
+
+.ebtn{
+	width: 180px;
+	height: 80px;
+	background:   url("../../assets/btn.png") no-repeat;
+	background-size:  100%;
+	font-size: 24px;
+	border:none;
+	color: white;
+	text-shadow:-5px -5px 5px rgb(139, 6, 6);
+	position: absolute;
+	/* left: 200px; */
+	top: 200px;
+	left: 0px;
+}
+
+.btn:hover,.jbtn:hover{
+	font-size: 40px;
+}
+
+.ebtn:hover{
+	font-size: 32px;
+}
+
+
+
+.id_t,.names_t,.furigana_t,.joindate_t,.getcre_t,.credate_t{
+		color: red;
 		font-size: 70%;
 	width: 100%;
     height: 2%;
 	position: absolute;
-	top: 4%;
-	left: 45%;
+
+	left: 92%;
 	transform: translate(-50%,-50%);
+
 }
-.names_t{
-	color: red;
-	font-size: 70%;
-	 /* background: green;  */
-	width: 100%;
-    height: 2%;
-	position: absolute;
-	top: 15%;
-	left: 45%;
-	transform: translate(-50%,-50%);
-}
-.furigana_t{
-	color: red;
-	font-size: 70%;
-	width: 100%;
-    height: 2%;
-	position: absolute;
-	top: 27%;
-	left: 45%;
-	transform: translate(-50%,-50%);
-}
-.joindate_t{
-	color: red;
-	font-size: 70%;
-	width: 60%;
-    height: 2%;
-	position: absolute;
-	top: 41%;
-	left: 25%;
-	transform: translate(-50%,-50%);
-}
+
+/* 
 .getcre_t{
 	color: red;
 	font-size: 70%;
@@ -561,20 +660,22 @@
 	top: 67%;
 	left: 25%;
 	transform: translate(-50%,-50%);
-}
+} */
 
 .login_dialog{
 	height: 100%;
 	 /* background: green;  */
 }
 
-.eara1{
-	    height: 5%;
-		 /* background: green;  */
-}
 
-.cartname{
-	font-size: 50px;
+
+
+	.cartname{
+   background: rgb(182, 1, 1); 
+   font-size: 200%;
+   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+   color: white;
+
 }
 
 

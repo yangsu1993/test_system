@@ -10,8 +10,8 @@ var conn = mysql.createConnection(models.mysql);
 //database open建立连接
 conn.connect();
 
-
-
+//编码规范******************************
+//post get　違う
 
 
 // 登录接口
@@ -21,6 +21,7 @@ router.post('/login',(req,res)=>{
 	console.log(sel_username);
 	conn.query(sel_username, user.username, (error, results)=>{
 		if (error) {
+			alert("エラーが発生しました。システム管理者にご連絡ください");
 			throw error;
 		}
 		console.log(results)
@@ -32,6 +33,7 @@ router.post('/login',(req,res)=>{
 				let content ={name:user.username}; // 要生成token的主题信息
 				let secretOrPrivateKey="suiyi" // 这是加密的key（密钥） 
 				let token = jwt.sign(content, secretOrPrivateKey, {
+					
 						expiresIn: 60*60*1  // 1小时过期
 					});
 					res.send({'status':0,'token':token})
@@ -99,16 +101,23 @@ router.post('/add', (req, res) => {
         });
     });
 
-
+	//
+	
 
 	// 查找会员信息接口
     router.post('/check', (req, res) => {
         const params = req.body;
-        const sel_sql = $sql.pushin.select + " where "+params.tag +"= '" + params.key + "'";
+		//let pt    = Pattern.quote(params.tag);
+	
+		//let pt    =encodeURIComponent(params.tag);
+		//let pt    = decodeURI(params.tag);
+        const sel_sql = $sql.pushin.select + " where "+params.tag  +"= '" + params.key + "'";
        // const add_sql = $sql.pushin.add;
-      //  console.log(sel_sql);
-    
+       console.log(sel_sql);
+
+	  				
         conn.query(sel_sql, [params.key], (error, results) => {
+			
             if(error) {
                 console.log(error);
             }
@@ -116,7 +125,9 @@ router.post('/add', (req, res) => {
 			//	console.log(results);					
 					//送所有数据
 				res.send(results);
+				
 			} else {
+				
 				res.send("-1");
 			}
         });

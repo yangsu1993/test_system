@@ -1,31 +1,33 @@
 <template>
-	<div class="m_r">
+	<div class="background">
 		<header class="top_bar">
 		    <a onclick="window.history.go(-1)" class="icon_back"></a>
 		    <h3 class="cartname">新規登録</h3>
+			<button @click="edit()" class="ebtn">戻る</button>
 		</header>
-		<main class="user_login_box">
-		    <div class="login_dialog">
+		<main class="new_box">
+		    <div class="new_dialog">
                  <div class="_userid">
-					 ユーザーID：
-		            <input type="text" name="username" placeholder="ユーザーID" v-on:input="check_word($event)" class="id_input" v-model="username">
+					 ユーザー名：
+		            <input type="text" name="username" placeholder="ユーザーID" v-on:input="check_word($event)" class="id_input" v-model="username"  maxlength="7" >
 		        		<p id="username" class="username_t"></p>
 				</div>
-				<div style="margin-top:6%;"></div>
-                <div class="_username u_passwd">
+				<div style="margin-top:8%;"></div>
+                <div class=" _passwd">
 					暗証番号：
-		            <input type="password" name="password" placeholder="暗証番号"  v-on:input="check_word($event)" class="password_input" v-model="password">
+		            <input type="password" name="password" placeholder="暗証番号"  v-on:input="check_word($event)" class="password_input" v-model="password"  maxlength="10" >
 		       			<p id="password" class="password_t"></p>
 			    </div>
-				<div style="margin-top:6%;"></div>
-		        <div class="_username u_passwd">
+				<div style="margin-top:8%;"></div>
+		        <div class="_pwdage">
 					再度入力：
-		            <input type="password" name="passwd_ag" placeholder="暗証番号もう一度入力してください"  v-on:input="same_check()" class="password_again" v-model="password_ag">
+		            <input type="password" name="passwd_ag" placeholder="暗証番号もう一度入力してください"  v-on:input="same_check()" class="password_again" v-model="password_ag"  maxlength="10" >
 		       			<p id="password_ag" class="pswag_t"></p>
 			    </div>
-		        <div style="margin-top:6%;"></div>
+		        <div style="margin-top:8%;"></div>
 		        <div class="login_box">
-		            <button @click="new_user_check()" class="btn_login">提出</button>
+		            <button @click="new_user_check()" class="btn">提出</button>
+				
 		        </div>
 		    </div>
 		</main>
@@ -42,33 +44,63 @@
 			}
 		},
 		methods:{
+
+			edit(){
+          this.$router.push('/');
+      },
+
+	  stringChange(word){
+				
+                var tt = word.toString().trim();
+            	var yy = tt.toString().replace( /\s+/g, "　");
+				   return yy;
+	  },
+
+
 			new_user_check(){
 				const self = this;
 				if(self.username != "" && self.password != "" && self.password_ag != ""){
 					if(self.password !=self.password_ag){
-						alert("暗証番号一致してない");
+						//alert("暗証番号一致してない");
+						this.$message({
+										type: 'warning',
+										message: '暗証番号一致してない'
+									}); 
 					
 					}else{
 					self.$axios({
 						method:'post',
 						url: '/api/user/add',
 						data: {
-							username: self.username,
-							password: self.password
+							
+							username : this.stringChange(self.username),
+							password : this.stringChange(self.password)
 						}
 					})
 					.then( res => {
 						switch(res.data){
 							case 0:
-								alert("新規された");
+								 this.$message({
+										type: 'success',
+										message: '新規された'
+									}); 
+								//alert("新規された");
 								this.$router.push("/")
 								break;
 							case -1:
-								alert("ユーザー名もう存在している");
+								 this.$message({
+										type: 'warning',
+										message: 'ユーザー名存在された'
+									}); 
+								//alert("ユーザー名もう存在している");
 								break;
 						}
 					})
 					.catch( err => {
+							 this.$message({
+										type: 'error',
+										message: 'エラーが発生しました。システム管理者にご連絡ください'
+									}); 
 						console.log(err);
 					})
 					}
@@ -90,20 +122,21 @@
 			var y = n.currentTarget.name;
 			//输入栏内容
 			var x =  n.currentTarget.value;
-			// console.log(y);
-			// console.log(x);
+			
 			 if(x==""){ document.getElementById(y).innerHTML = "*空欄不可"}else{
-				
-					 	 //console.log((/[\u2E80-\uFE4F]+/).test(x));
-					 if((/[\u2E80-\uFE4F]+/).test(x)||(/[\u4e00-\u9fb5]+/).test(x)){
-						 document.getElementById(y).innerHTML = "*全角不可"
+
+				if(y=="username"){
+						 	 //console.log((/[\u2E80-\uFE4F]+/).test(x));
+					 if((/[\u2E80-\uFE4F]+/).test(x)||(/[\uff61-\uff9f]+/).test(x)||(/[\u0000-\u002F\u003A-\u00ff]+/).test(x)||(/[\u00A4-\uFFE5]+/).test(x)){
+						 document.getElementById(y).innerHTML = "*数字のみ"
 						  //console.log(y);
 					 }else{
-						
 						 document.getElementById(y).innerHTML = ""
-
-
 					 } 
+				}else{
+							 document.getElementById(y).innerHTML = ""
+				}
+					
 				 
 				 }
 			 },
@@ -137,65 +170,98 @@
 
 <style scoped>
 
-	.login_dialog{
-		font-family: Georgia, 'Times New Roman', Times, serif;
-		
-		font-size: 110%;
-		width: 50%;
-		height: 50%;
-		color: rgb(0, 0, 0);
-		font-weight:900;
+	.background{
+	width:1900px;
+	height:950px ;
+   
+	background: white url("../../assets/yun.png") repeat;
+    position: absolute;
+	/* opacity: 0.7; */
+}
 
+.new_box{
+	background:  white url("../../assets/frame.png") no-repeat;
+	background-size:  100%;
+	 /* box-shadow:10px 10px 10px gray; */
+	width: 900px;
+	height: 492px;
+	position:relative;
+	top: 50px;
+	left: 500px;
+}
+
+	.new_dialog{
+		
+		font-size: 30px;
+		width: 800px;
+	height: 438px;
 		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%,-50%);
-		background: white  url(https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4007190055,333743685&fm=26&gp=0.jpg) no-repeat;
-		background-size: 100% 120%;
-		background-position-y: 80%;
+	top: 80px;
+	left: 100px;
 		
 	}
 
 .id_input,.password_input,.password_again{
-	width: 70%;
-	height: 7%;
-	font-size: 90%;
+	width: 400px;
+	height: 50px;
+	font-size: 20px;
 	position: absolute;
-	right: 4%;
+	left: 250px;
 	
 }
 
 
-.username_t,.password_t{
-	font-size: 80%;
-	color: red;
-	width: 60%;
-	height: 10%;
+.btn{
+	width: 160px;
+	height: 80px;
+	background:  white url("../../assets/btn.png") no-repeat;
+	background-size:  100%;
+	font-size: 30px;
+	border:none;
+	color: white;
+	text-shadow:-5px -5px 5px rgb(139, 6, 6);
 	position: absolute;
-	left: 25%;
-	top: 5%;
-}
-
-.password_t{
-	font-size: 80%;
-	color: red;
-	width: 60%;
-	height: 10%;
-	position: absolute;
-	left: 25%;
-	top: 25%;
-}
-
-.pswag_t{
-	font-size: 80%;
-	color: red;
-	width: 60%;
-	height: 10%;
-	position: absolute;
-	left: 25%;
-	top: 45%;
+	/* left: 200px; */
+	top: 300px;
+	left: 500px;
 }
 
 
+
+.ebtn{
+	width: 160px;
+	height: 80px;
+	background:   url("../../assets/btn.png") no-repeat;
+	background-size:  100%;
+	font-size: 30px;
+	border:none;
+	color: white;
+	text-shadow:-5px -5px 5px rgb(139, 6, 6);
+
+
+}
+
+.btn:hover,.ebtn:hover{
+	font-size: 40px;
+}
+
+.username_t,.password_t,.pswag_t{
+	font-size: 20px;
+	color: red;
+	width: 450px;
+	height: 50px;
+	position: absolute;
+	left: 250px;
+/* background: yellowgreen; */
+}
+
+
+
+.cartname{
+   background: rgb(182, 1, 1); 
+   font-size: 200%;
+   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+   color: white;
+}
 
 </style>

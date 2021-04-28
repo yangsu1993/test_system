@@ -1,58 +1,89 @@
 <template>
 
-<div class="my_l">
+<div class="background">
         
     <!-- //タイトル -->
 		<header class="top_bar">
 		    <a onclick="window.history.go(-1)" class="icon_back"></a>
 		    <h3 class="cartname">情報検索</h3>
+        <button @click="edit()" class="ebtn">ログアウト</button>
 		</header>
 
       
-       
-     
 		<main class="user_login_box">
-		   
-                <div  >
-             <!-- 選択肢 -->
-     <el-select name="check" class="_check" v-model="value" placeholder="項目選択肢">
-    <el-option 
-      v-for="item in options"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value">
+             
+            <div class="btnGroup">
+
+              
+                <div class="btnBack"></div>
+             
+                     
+               <button @click="add_data()"
+                    type="text"
+                    class="newBtn"
+                    >
+                    新規</button>
+              <div style="margin-top:2%;"></div>
+              <button @click="add_all()"
+                    type="text"
+                    class="allBtn"
+                    >
+                    全員リスト</button>
+             
+              
+            
+                 
+            </div>
+
+		   <div class="findKey">
+         
+         <div>
+            <!-- 入力枠 -->
+		    <input type="text" name="key" placeholder="キーワードを入力してください" class="key_input" v-model="key"  maxlength="25"/>
+         </div>
+
+
+       <div class="checkP">
+                  <!-- 選択肢 -->
+              <el-select name="check" class="_check" v-model="value" placeholder="項目選択肢">
+              <el-option 
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
     </el-option>
      </el-select>
-         </div>
-         <!-- 入力枠 -->
-		    <input type="text" name="key" placeholder="キーワードを入力してください" class="key_input" v-model="key"/>
+       </div>
+              
+         
+       <div class="CbtnP">
+              
         <!-- 検索ボタン -->
-		     
-         <button @click="goCheck()" class="btn_login">検索</button>		 
+         <button @click="goCheck()" class="Cbtn">検索</button>		 
+
+       </div>
+
+      <div class="tattleF"></div>
+
+            <div class="tattleW" >キーワード検索</div>
+        
+             
+
+
+       </div>
+               
                    
-            <div class="graph">
-            リスト
-                  <el-button
-                    @click.native.prevent="add_data()"
-                    type="text"
-                    size="big">
-                    新規
-                    </el-button>
-
-                     <el-button
-                    @click.native.prevent="add_all()"
-                    type="text"
-                    size="big">
-                    全員リスト
-                    </el-button>
-
+            <div class="graph" >
+              .
             <div class="=table_data"> 
                 <el-table
                 :data="tableData"
-                style="width: 100%"
-                max-height="250"
-                max-width="200"
-                
+               
+                style="font-size: 20px"
+                max-height="500"
+                max-width="2000"
+               :row-style="{height:'60px'}"
+             
                 >
                 
                 <el-table-column
@@ -60,37 +91,49 @@
                 prop="id"
                 label="ユーザーID"
                  sortable
-               
-                width="120">
+                width="200"
+                 align="center"
+                 header-align="center"
+                >
                 </el-table-column>
                 <el-table-column
                 prop="names"
                 label="ユーザー名"
-                width="120">
+                width="200"
+                align="center"
+                 header-align="center">
                 </el-table-column>
                 <el-table-column
                 prop="furigana"
                 label="フリガナ"
-                width="120">
+                width="200"
+                 align="center"
+                 header-align="center">
                 </el-table-column>
                 <el-table-column
                 prop="join_date"
                 label="入社年月日"
                 sortable
-                width="120">
+                width="200"
+                 align="center"
+                 header-align="center">
                 </el-table-column>
                 <el-table-column
                 prop="get_cre"
                 label="資格"
-                width="120">
+                width="200"
+                 align="center"
+                 header-align="center">
                 </el-table-column>
 
                  <el-table-column
 
                 label="資格認定日付"
-                width="140"
+                width="200"
                prop="cre_date"
                 sortable 
+                 align="center"
+                 header-align="center"
                 >
                 </el-table-column>
 
@@ -98,26 +141,30 @@
                 prop="bonus_date"
                 label="奨励金日付"
                  sortable
-                width="120">
+                width="200"
+                 align="center"
+                 header-align="center">
                 </el-table-column>
                 <el-table-column
                 label="操作"
                 :formatter="formatter"
-                width="120"
+                width="200"
                  prop="do" 
+                   align="center"
+                  header-align="center"
                >
                 <template slot-scope="scope">
                     <el-button
                     @click.native.prevent="deleteRow(scope.$index,scope.row)"
                     type="text"
-                    size="small">
+                   >
                     削除
                     </el-button>
 
                     <el-button
                     @click.native.prevent="change_data(scope.$index,scope.row)"
                     type="text"
-                    size="small">
+                   >
                     修正
                     </el-button>
                 </template>
@@ -130,10 +177,7 @@
   
 		</main>
 
-        <!-- Log out -->
-          <div class="go_reg_box">
-          <el-button @click.native.prevent="token_edit()" >ログアウト</el-button>
-	     </div>
+     
 	</div>
 
 
@@ -147,8 +191,7 @@
     
     data() {
       return{
-          key:'',
-
+                key:'',
                 id:'',
                 names:'',
                 furigana:'',
@@ -209,17 +252,26 @@
         
       },
 
-      token_edit(){
-          localStorage.removeItem('Authorization');
+      	edit(){
+			  localStorage.removeItem('Authorization');
           this.$router.push('/');
       },
+
+      // token_edit(){
+      //     localStorage.removeItem('Authorization');
+      //     this.$router.push('/');
+      // },
 
 
             // 削除ボタン
       deleteRow(index, rows) {
-
-          
-         let self = this;
+            
+          this.$confirm('ユーザーデータを削除しますか', '削除確認', {
+          confirmButtonText: '確定',
+          cancelButtonText: '取り消し',
+          type: 'warning'
+        }).then(() => {
+              let self = this;
 
         self.$axios({
 						method:'post',
@@ -228,17 +280,34 @@
                 id:rows.id
               }
 					})	.then( res => {
-            	switch(res.data){
+             	switch(res.data){
 							case -1:
-								alert("削除した");
 								break;
 						}
               
 					}).catch( err => {
+            	 this.$message({
+										type: 'error',
+										message: 'エラーが発生しました。システム管理者にご連絡ください'
+									}); 
 						console.log(err);
 					})
 
         this.tableData.splice(index, 1); 	
+
+
+          this.$message({
+            type: 'success',
+            message: '削除した'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取り消し'
+          });          
+        });
+          
+       
 
       },
         // 修正ボタン
@@ -293,8 +362,21 @@
               //console.log(self.tableData);
 
 					}).catch( err => {
+
+						 this.$message({
+										type: 'error',
+										message: 'エラーが発生しました。システム管理者にご連絡ください'
+									}); 
+
 						console.log(err);
 					})
+      },
+
+      changes(){
+          cha=  this.key;
+
+
+
       },
 
     // キーワードの入力判断
@@ -302,48 +384,71 @@
         let self = this;
         if(self.key == ''){
    
-          alert('キーワードを入力してください');
-        }else if(self.value==''){
-          alert('検索項目を入力してください');
-        }else{
 
+               this.$message({
+										type: 'warning',
+										message: 'キーワードを入力してください'
+									}); 
+         // alert('キーワードを入力してください');
+        }else if(self.value==''){
+          this.$message({
+										type: 'warning',
+										message: '検索項目を入力してください'
+									}); 
+         // alert('検索項目を入力してください');
+        }else{
+          var tt = "";
+           var rr = "";
+            var yy = "";
+
+            
+                 //tt=self.key;
+                  rr=self.key.replace(/'/g, "''");
+                   tt=rr.trim();
+                  
+                   yy=tt.replace( /\s+/g, "　");
+           
+               console.log(yy);
+           
           		self.$axios({
 						method:'post',
 						url: '/api/user/check',
 						data: {
-               key:self.key,
+              
+              key:yy,
+              // key: document.getElementById("key").innerHTML ,
                tag:self.value
              
 						}
 					})	.then( res => {
+            
+                	//console.log(document.write(encodeURIComponent(self.key)));
             if (res.data == -1) {
 
-              alert("結果がない");
+             // alert("結果がない");
+               this.$message({
+										type: 'warning',
+										message: '結果がない'
+									}); 
+
             } else {
-              //console.log(res);
-
-              //self.join_date(type="date")
-
-              self.tableData=res.data
-             // console.log(self.tableData);     
+              self.tableData=res.data     
             }
-						// switch(res.data){
-						// 	case 0:
-            //     console.log(res);
-            //     	alert("データを展示");
-  
-
-						// 		break;
-						// 	case -1:
-						// 		alert("結果がない");
-						// 		break;
-						// }
+			
+			
 					}).catch( err => {
+            	 this.$message({
+										type: 'error',
+										message: 'エラーが発生しました。システム管理者にご連絡ください'
+									}); 
+
 						console.log(err);
+					
 					})
         }
 				
-			}
+			},
+     
 		},
 
      mounted () { 
@@ -360,47 +465,202 @@
 </script>
 
 <style scoped>
+
+	.background{
+	width:1900px;
+	height:950px ;
+  /**宽高100%是为了图片铺满屏幕 */
+   
+	background: white url("../../assets/yun.png") repeat;
+    position: absolute;
+	/* opacity: 0.7; */
+}
+
+
 .graph{
 
-  background: rgb(226, 226, 226); 
-  
+    
+  /* background:rgb(253, 100, 100);  */
+  font-size: 40px;
+  color:white;
+  background:rgb(255, 145, 145);
+  	
 		position: absolute;
-  top: 40%;
-	left: 10%;
-	/* transform: translate(-50%,-50%); */
+  top: 380px;
+	left: 8%;
+	background: url("../../assets/btn.png") repeat;
+	background-size:  10%;
 }
 
- ._check{
+/* 検索についてUI */
+.tattleF{
+  width: 300px;
+  height: 300px;
+   position:relative;
+  	top: -200px;
+    left: -200px;
+  font-size: 30px;
+  	background:  url("../../assets/he.png") repeat;
+    background-size: 100%;
+    transform: rotateY(180deg)
+    
+}
 
-      position: absolute;
-  	top: 30%;
-  	left: 23%;
-  	transform: translate(-50%,-50%);
+.tattleW{
+  /* background: yellowgreen; */
+  width: 250px;
+  height: 50px;
+ 
+  font-size: 30px;
+  
+    background-size: 100%;
+      position:relative;
+  	top: -450px;
+    left: -50px;  
+}
 
-} 
+
+
+.findKey{
+  width: 500px;
+  height: 272px;
+ position:relative;
+  	top: -10px;
+	left: 1000px;
+  	background:  white url("../../assets/frame.png") no-repeat;
+    background-size: 100%;
+  /* background: yellowgreen; */
+
+}
+
+
 
 .key_input{
-    width: 25%;
-    height: 6%;
-    font-size: 130%;
-      position: absolute;
-  	top: 30%;
-	left: 50%;
-  	transform: translate(-50%,-50%);
+    width:350px;
+    height:50px;
+    font-size: 130%;  
+      position:relative;
+  
+	    left: 100px;
+       top: 120px; 
 }
-.btn_login{
-  width: 10%;
-    height: 6%;
-      position: absolute;
-  	top: 30%;
-	left: 72%;
-  	transform: translate(-50%,-50%);
+
+
+
+ .checkP{
+     width: 300px;
+       position:relative;
+	    left: 240px;
+       top: -10px; 
+} 
+
+.CbtnP{
+   position:relative;
+  
+	left: 150px;
+  top: 90px;
+
 }
+.Cbtn{
+	width: 160px;
+	height: 80px;
+	background:  url("../../assets/btn.png") no-repeat;
+	background-size:  100%;
+	font-size: 30px;
+	border:none;
+	color: white;
+	text-shadow:-5px -5px 5px rgb(139, 6, 6);
+
+}
+
+
+.Cbtn:hover,.newBtn:hover{
+	font-size: 40px;
+}
+
+/* タイトルUI */
 
 .cartname{
-   background: rgb(151, 173, 245); 
+   background: rgb(182, 1, 1); 
    font-size: 200%;
+   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+   color: white;
 }
 
+
+.ebtn{
+	width: 180px;
+	height: 80px;
+	background:   url("../../assets/btn.png") no-repeat;
+	background-size:  100%;
+	font-size: 24px;
+	border:none;
+	color: white;
+	text-shadow:-5px -5px 5px rgb(192, 2, 2);
+	position: absolute;
+	/* left: 200px; */
+	top: 100px;
+	left: 0px;
+}
+.ebtn:hover,.allBtn:hover{
+	font-size: 32px;
+}
+
+.newBtn,.allBtn{
+	width: 200px;
+	height: 100px;
+	background:   url("../../assets/btn.png") no-repeat;
+	background-size:  100%;
+	font-size: 24px;
+	border:none;
+	color: white;
+	text-shadow:-5px -5px 5px rgb(139, 6, 6);
+/* background: turquoise; */
+	position:relative;
+
+	top: -450px;
+	
+}
+/* 
+.btns{
+  width: 300px;
+    height:300px ;
+  	position: absolute;
+
+	top: -50px;
+	left: 100px;
+  background: greenyellow;
+
+} */
+
+
+.btnGroup{
+  width: 500px;
+    height:400px ;
+  	position: absolute;
+
+	top: 100px;
+	left: 480px;
+ 
+}
+
+
+.btnBack{
+    width: 500px;
+    height:500px ;
+    /* background: greenyellow; */
+	background:   url("../../assets/bagua.png") no-repeat; 
+	background-size:  100%;
+  opacity: 0.9;
+  position:relative;
+  	animation:rotating 60s linear infinite
+    
+	/* -webkit-animation:rotating 5s infinite;  */
+}
+
+@keyframes rotating{
+from{transform:rotate(0)}
+to{transform:rotate(360deg)}
+}
 
 </style>
