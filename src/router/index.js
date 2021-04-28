@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 //import HelloWorld from '@/components/HelloWorld'
-import First from '@/components/text/login'
-import New_user from '@/components/text/new'
-import home from '@/components/text/home'
-import add from '@/components/text/data_add'
-import change from '@/components/text/change'
+import First from '@/components/text/Login'
+import New_user from '@/components/text/AdmAdd'
+import home from '@/components/text/Home'
+import add from '@/components/text/DataAdd'
+import change from '@/components/text/ChangeData'
 import axios from 'axios' //引入axios
 
 import { Message } from "element-ui"

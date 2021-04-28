@@ -1,0 +1,93 @@
+.background{
+	width:1900px;
+	height:950px ;
+   
+	background: white url("../../assets/yun.png") repeat;
+    position: absolute;
+	/* opacity: 0.7; */
+}
+
+.new_box{
+	background:  white url("../../assets/frame.png") no-repeat;
+	background-size:  100%;
+	 /* box-shadow:10px 10px 10px gray; */
+	width: 900px;
+	height: 492px;
+	position:relative;
+	top: 50px;
+	left: 500px;
+}
+
+	.new_dialog{
+		
+		font-size: 30px;
+		width: 800px;
+	height: 438px;
+		position: absolute;
+	top: 80px;
+	left: 100px;
+		
+	}
+
+.id_input,.password_input,.password_again{
+	width: 400px;
+	height: 50px;
+	font-size: 20px;
+	position: absolute;
+	left: 250px;
+	
+}
+
+
+.btn{
+	width: 160px;
+	height: 80px;
+	background:  white url("../../assets/btn.png") no-repeat;
+	background-size:  100%;
+	font-size: 30px;
+	border:none;
+	color: white;
+	text-shadow:-5px -5px 5px rgb(139, 6, 6);
+	position: absolute;
+	/* left: 200px; */
+	top: 300px;
+	left: 500px;
+}
+
+
+
+.ebtn{
+	width: 160px;
+	height: 80px;
+	background:   url("../../assets/btn.png") no-repeat;
+	background-size:  100%;
+	font-size: 30px;
+	border:none;
+	color: white;
+	text-shadow:-5px -5px 5px rgb(139, 6, 6);
+
+
+}
+
+.btn:hover,.ebtn:hover{
+	font-size: 40px;
+}
+
+.username_t,.password_t,.pswag_t{
+	font-size: 20px;
+	color: red;
+	width: 450px;
+	height: 50px;
+	position: absolute;
+	left: 250px;
+/* background: yellowgreen; */
+}
+
+
+
+.cartname{
+   background: rgb(182, 1, 1); 
+   font-size: 200%;
+   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+   color: white;
+}

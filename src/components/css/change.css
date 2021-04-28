@@ -1,0 +1,177 @@
+
+	.background{
+        width:1900px;
+        height:950px ;
+      /**宽高100%是为了图片铺满屏幕 */
+       
+        background: white url("../../assets/yun.png") repeat;
+        position: absolute;
+        /* opacity: 0.7; */
+    }
+            
+    
+        .user_login_box{
+        background:  white url("../../assets/frame.png") no-repeat;
+        background-size:  100%;
+         /* box-shadow:10px 10px 10px gray; */
+        width: 1200px;
+        height: 652px;
+        position:relative;
+        
+        left: 350px;
+        font-size: 25px;
+        }
+    
+    
+    .eara1{
+        width:50%;
+    
+      /* background: red; */
+        position:relative;
+        top: 150px;
+        left: 20px;
+    
+    }
+    
+    
+    .eara2{
+        width:47%;
+    
+       /* background: red; */
+        position:relative;
+        top: -180px;
+        left: 620px;
+    
+    }
+    
+    
+    
+    
+    
+    .id,.cre_date,.password_input,.password_again,.names,.name_furigana,.join_date,.get_cre,.bonus_date{
+    
+        width: 300px;
+        height:30px;
+        font-size: 20px;
+        position: absolute;
+        right: 7%;
+        
+    }
+    
+    /* .btn_login{
+    
+        width: 20%;
+        height: 10%;
+            position: absolute;
+        top: 90%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+    } */
+    
+    
+    .btn{
+        width: 160px;
+        height: 80px;
+        background:  white url("../../assets/btn.png") no-repeat;
+        background-size:  100%;
+        font-size: 30px;
+        border:none;
+        color: white;
+        text-shadow:-5px -5px 5px rgb(139, 6, 6);
+        position: absolute;
+        /* left: 200px; */
+        top: 450px;
+        left: 800px;
+    }
+    
+    
+    
+    .jbtn{
+        width: 160px;
+        height: 80px;
+        background:   url("../../assets/btn.png") no-repeat;
+        background-size:  100%;
+        font-size: 30px;
+        border:none;
+        color: white;
+        text-shadow:-5px -5px 5px rgb(139, 6, 6);
+    
+    }
+    
+    .btn:hover,.jbtn:hover{
+        font-size: 40px;
+    }
+    
+    
+    
+    .ebtn{
+        width: 180px;
+        height: 80px;
+        background:   url("../../assets/btn.png") no-repeat;
+        background-size:  100%;
+        font-size: 24px;
+        border:none;
+        color: white;
+        text-shadow:-5px -5px 5px rgb(139, 6, 6);
+        position: absolute;
+        /* left: 200px; */
+        top: 200px;
+        left: 0px;
+    }
+    
+    
+    .ebtn:hover{
+        font-size: 32px;
+    }
+    
+    
+    
+    .id_t,.names_t,.furigana_t,.joindate_t,.getcre_t,.credate_t{
+            color: red;
+            font-size: 70%;
+        width: 100%;
+        height: 2%;
+        position: absolute;
+    
+        left: 92%;
+        transform: translate(-50%,-50%);
+    
+    }
+    
+    /* 
+    .getcre_t{
+        color: red;
+        font-size: 70%;
+        width: 60%;
+        height: 2%;
+        position: absolute;
+        top: 52%;
+        left: 25%;
+        transform: translate(-50%,-50%);
+    }
+    .credate_t{
+        color: red;
+        font-size: 70%;
+        width: 60%;
+        height: 2%;
+        position: absolute;
+        top: 67%;
+        left: 25%;
+        transform: translate(-50%,-50%);
+    } */
+    
+    .login_dialog{
+        height: 100%;
+         /* background: green;  */
+    }
+    
+    
+    
+    
+        .cartname{
+       background: rgb(182, 1, 1); 
+       font-size: 200%;
+       font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+       color: white;
+    
+    }
