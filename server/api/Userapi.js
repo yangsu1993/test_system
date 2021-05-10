@@ -6,15 +6,16 @@ var $sql = require('../sqlfun');//sql语句
 const jwt= require('jsonwebtoken');
 
 // 连接数据库
+//データベースに繋がり
 var conn = mysql.createConnection(models.mysql);
 //database open建立连接
 conn.connect();
 
-//编码规范******************************
-//post get　違う
+
 
 
 // 登录接口
+//ログインインターフェース
 router.post('/login',(req,res)=>{
 	const user = req.body;
 	const sel_username = $sql.user.select + " where userName = '" + user.username + "'";
@@ -58,6 +59,7 @@ router.post('/add', (req, res) => {
 	conn.query(sel_sql, params.username, (error, results) => {
 		if(error) {
 			console.log(error);
+			alert("エラーが発生しました。システム管理者にご連絡ください");
 		}
 		if (results.length != 0 && params.username == results[0].userName) {
 			res.send("-1");   // -1 表示用户名已经存在
@@ -85,6 +87,7 @@ router.post('/add', (req, res) => {
         conn.query(sel_sql, params.id, (error, results) => {
             if(error) {
                 console.log(error);
+				alert("エラーが発生しました。システム管理者にご連絡ください");
             }
             if (results.length != 0 && params.id == results[0].id) {
                 res.send("-1");   // -1 表示用户id已经存在
@@ -105,12 +108,9 @@ router.post('/add', (req, res) => {
 	
 
 	// 查找会员信息接口
-    router.post('/check', (req, res) => {
-        const params = req.body;
-		//let pt    = Pattern.quote(params.tag);
-	
-		//let pt    =encodeURIComponent(params.tag);
-		//let pt    = decodeURI(params.tag);
+    router.get('/check', (req, res) => {
+        const params = req.query;
+
         const sel_sql = $sql.pushin.select + " where "+params.tag  +"= '" + params.key + "'";
        // const add_sql = $sql.pushin.add;
        console.log(sel_sql);
@@ -120,6 +120,7 @@ router.post('/add', (req, res) => {
 			
             if(error) {
                 console.log(error);
+				alert("エラーが発生しました。システム管理者にご連絡ください");
             }
             if (results.length != 0 ) {
 			//	console.log(results);					
@@ -135,16 +136,16 @@ router.post('/add', (req, res) => {
 
 	// 全员信息接口
     router.post('/allcheck', (req, res) => {
-        const params = req.body;
+       
 		const　sel_sql  = $sql.pushin.select + " where 1 "
     
-        conn.query(sel_sql, [params.key], (error, results) => {
+        conn.query(sel_sql, [], (error, results) => {
             if(error) {
                 console.log(error);
+				alert("エラーが発生しました。システム管理者にご連絡ください");
             }				
 					//送所有数据
 				res.send(results);
-			
         });
     });
 
@@ -156,6 +157,7 @@ router.post('/add', (req, res) => {
 			conn.query(sel_sql, [params.id], (error) => {
 				if(error) {
 					console.log(error);
+					alert("エラーが発生しました。システム管理者にご連絡ください");
 				}
 				 else {
 						res.send("-1");
@@ -177,6 +179,7 @@ router.post('/add', (req, res) => {
         conn.query(sel_sql, params.id, (error,results) => {
             if(error) {
                 console.log(error);
+				alert("エラーが発生しました。システム管理者にご連絡ください");
             } 
 				console.log(results);
                 res.send("0"); // 0 表示用户创建成功

@@ -1,14 +1,22 @@
 <template>
-        <div class="background">
+        <div id="home" class="background"  @click ="click_scene()">
+              <!-- style="{	cursor:url('test.ico'),default;}" -->
         <!-- //タイトル -->
 	    	<header class="top_bar">
 		        <a onclick="window.history.go(-1)" class="icon_back"></a>
 		        <h3 class="cartname">情報検索</h3>
             <button @click="edit()" class="ebtn">ログアウト</button>
+            <div class="company_logo">
+			<div class="c_mark"></div>
+			<div class="c_name"> 株式会社天時情報システム</div>
+			<div class="c_Tel"> TEL:03-5913-7230　　FAX:03-5913-7231</div>
+                  <!-- <div class="test"></div> -->
+		</div>
+            
 	    	</header>
-      
-        <!-- 社員検索-->
-		    <main class="user_login_box">
+
+            <!-- 社員検索-->
+		    <main class="_box">
 
             <!-- 左側の二つボタン   -->
             <div class="btnGroup">
@@ -29,7 +37,7 @@
             <div class="findKey">
             <div>
             <!-- 検索入力枠 -->
-            <input type="text" name="key" placeholder="キーワードを入力してください" class="key_input" v-model="key"  maxlength="25"/>
+            <input type="text" name="key" placeholder="キーワードを入力してください" class="key_input" v-model="key"  maxlength="20"/>
             </div>
 
 
@@ -49,17 +57,17 @@
             <div class="CbtnP">
             <button @click="goCheck()" class="Cbtn">検索</button>		 
             </div>
-            <div class="tattleF"></div>
-            <div class="tattleW" >キーワード検索</div>
+            <div class="check_photo"></div>
+            <div class="check_tattle" >キーワード検索</div>
             </div>
                   
             <!-- 主なグラフ           -->
-            <div class="graph" >.
+            <div class="graph" >
             <div class="=table_data"> 
             <el-table
                   :data="tableData"
                   style="font-size: 20px"
-                  max-height="500"
+                  max-height="510"
                   max-width="2000"
                   :row-style="{height:'60px'}">
             <el-table-column
@@ -138,6 +146,37 @@
             </div>
             </div>
 	    	</main> 
+
+            <div class="cloud" id="cloud">
+			<div class="cloud_photo"></div>
+		</div>
+
+            <div class="door" id="door">
+			<div class="door_l">
+                        <div  class="door_l_photo1"></div>
+                        <div  class="door_l_photo2"></div>
+                        <div  class="door_lock"></div>
+                  </div>
+			<div class="door_r">
+                        <div  class="door_r_photo1"></div>
+                        <div  class="door_r_photo2"></div>
+                         <div  class="door_key"></div>
+                  </div>
+		</div>
+
+             <div class="door_close" id="door_close">
+			<div class="door_l_close">
+                        <div  class="door_l_photo1"></div>
+                        <div  class="door_l_photo2"></div>
+                        <div  class="door_lock_close"></div>
+                  </div>
+			<div class="door_r_close">
+                         <div  class="door_r_photo1"></div>
+                        <div  class="door_r_photo2"></div>
+                         <div  class="door_key_close"></div>
+                  </div>
+		</div>
+
       	</div>
 </template>
 
@@ -146,4 +185,9 @@
 export default dataHome;
 </script>
 
-<style scoped src="../../components/css/home.css"></style>
+<style scoped src="../../components/css/home.css">
+
+
+
+		
+</style>

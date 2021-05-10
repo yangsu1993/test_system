@@ -17,12 +17,14 @@ export default{
 				bonus_date:'',
 				disabled:true,
 				btnDisabled:false,
+				click_btn:true,
 				regInfo:{}
+				
 			}
 		},
 
 		mounted () { 	  
-       //这个属性就可以，在里面声明初始化时要调用的方法即可
+       //初めて入る時
       // we can implement any method here like
 			const nowDate = new Date();
             const date = {
@@ -33,6 +35,13 @@ export default{
             const newmonth = date.month>10?date.month:'0'+date.month
             const day = date.date>10?date.date:'0'+date.date
             this.join_date = date.year + '-' + newmonth + '-' + day
+
+					
+			//時間遅延
+			setTimeout(() => {
+				document.getElementById("cloud").style.display="none";
+			   // console.log(document.getElementById("door").style.display);
+			 }, 600);
  		   },
 
 
@@ -41,12 +50,34 @@ export default{
 
 		methods:{
 
-			jump(){this.$router.push('/home'); },
+			jump(){
+				this.click_btn=false;
+				setTimeout(() => {
+					this.$router.push('/home');
+			 }, 100);
+				
+				
+			// 	this.$router.push({
+			// 	name:'home',
+			// 	params:{
+			// 		first_in:false
+			//   }
+			// });
+		 },
 
-	  		edit(){
-				localStorage.removeItem('Authorization');
-				this.$router.push('/');
-      			},
+			edit(){
+			    this.click_btn=false;
+				document.getElementById("door_close").style.display="block";
+	
+					//時間遅延
+										setTimeout(() => {
+						//console.log(res);
+						localStorage.removeItem('Authorization');
+						this.$router.push('/');
+					 }, 1200);
+	
+				
+				},
 
 	  		stringChange(word){
                 var tt = word.toString().trim();
@@ -57,8 +88,8 @@ export default{
 			
 			pushIn(){
 				const self = this;
-				//console.log( this.stringChange(self.id));
-				if(self.id.substring(2,7)!="" && self.names!="" && self.name_furigana!="" && self.join_date!=null){
+			
+				// if(self.id.length<=2 || self.names!="" || self.name_furigana!="" || self.join_date!=null){
 				if(self.get_cre!=""&&self.cre_date!="" || self.get_cre==""&&self.cre_date==""){
 				//ユーザーidの半角判断(半角+非全角+非全角字符)
 				//仮名の判断（片假名+非半角+非平假名+非中文+非全角+非全角記号）
@@ -69,12 +100,6 @@ export default{
 							//仮名の判断	
 					if(document.getElementById("name_furigana").innerHTML == ""){
 
-						// if(this.stringChange(self.name_furigana).replace(/ /g,"").length==0){
-						// 		console.log("################3");
-
-						// }
-
-						console.log( this.stringChange(self.name_furigana).toString().replace(/ /g,"").length);
 	
 						self.$axios({
 						method:'post',
@@ -97,13 +122,19 @@ export default{
 											type: 'success',
 											message: '新規された'
 											}); 
-										this.$router.push("/home")
+											this.click_btn=false;
+												//時間遅延
+											setTimeout(() => {
+													this.$router.push("/home")
+												
+											}, 100);
+										
 										break;
 									case -1:
 										if(self.btnDisabled==true){
 										this.$message({
 											type: 'error',
-											message: '連打禁止'
+											message: '該当データが存在している'
 											}); 
 										}else{
 											document.getElementById("id").innerHTML = "*ユーザー名もう存在している"
@@ -118,21 +149,23 @@ export default{
 											}); 
 								//	alert("エラーが発生しました。システム管理者にご連絡ください");
 												console.log(err);
+												
 										})
 						}else{	
 						 	this.$message({
 										type: 'warning',
-										message: '正しいカタカナは誤入力'
+										message: 'カタカナは誤入力'
 									}); 
-								//alert("正しいカタカナは誤入力");
+							
 							}
 						}else{
 
 						  	this.$message({
 										type: 'warning',
-										message: '正しい名前は誤入力'
+										message: '名前は誤入力'
+										
 									}); 
-						//alert("正しい名前は誤入力");
+						
 							}	
 						}else{
 						 	this.$message({
@@ -140,36 +173,45 @@ export default{
 										message: 'ユーザー番号は誤入力'
 									}); 
 							//	alert("ユーザー番号は誤入力");
-									
+						
 							}
 				}else{
 					document.getElementById("cre_date").innerHTML = "*空欄不可";
 				}			
-				}else{
-					if(self.join_date==null){
-					document.getElementById("join_date").innerHTML = "*空欄不可"
-					}
-					if(self.id.substring(2,7)==0){
-					document.getElementById("id").innerHTML = "*空欄不可"
-					}
-					if(self.names==0){
-					document.getElementById("names").innerHTML = "*空欄不可"
-					}
-					if(self.name_furigana==0){
-					document.getElementById("name_furigana").innerHTML = "*空欄不可"
-					}
-					 
-				}
+				// }else{
+				// 	console.log(this.id);
+				// 	if(self.join_date==null){
+				// 	document.getElementById("join_date").innerHTML = "*空欄不可"
+				// 	}
+				// 	if(self.id.length<=2){
+				// 	console.log(self.id.length);
+				// 	document.getElementById("id").innerHTML = "*空欄不可"
+				// 	}
+				// 	if(self.names==0){
+				// 	document.getElementById("names").innerHTML = "*空欄不可"
+				// 	}
+				// 	if(self.name_furigana==0){
+				// 	document.getElementById("name_furigana").innerHTML = "*空欄不可"
+				// 	}
+				
+				// }
 				
 			},
-				//资格填写（要么两个都写要么两个都不写）
+				//资格
 			cre_check(n){
-			//输入栏内容
+			//入力内容
 					var x =  n.currentTarget.value;
-					if(x!=""){
-					//console.log("???"+this.cre_date);
+					if(this.get_cre!=""){
+
+						if(this.cre_date==""){
+								//console.log("???"+this.cre_date);
 					document.getElementById("cre_date").innerHTML = "*空欄不可";
 					this.disabled=false
+						}else{
+							this.cre_date=""
+							document.getElementById("cre_date").innerHTML = "*空欄不可";
+							this.disabled=false
+						}
 					}else{
 					document.getElementById("cre_date").innerHTML = "";
 					this.cre_date=""
@@ -187,6 +229,15 @@ export default{
 			},
 
 
+			join_check(){
+				if(this.join_date ==""||this.join_date ==null ){
+					document.getElementById("join_date").innerHTML = "*空欄不可";
+				}else{
+					document.getElementById("join_date").innerHTML = "";
+				}
+			},
+
+
 			check_word(n){
 					//提示栏内容
 					var y = n.currentTarget.name;
@@ -197,9 +248,13 @@ export default{
 
 					if(y=="id"){	
 					//保留前两位
+					if(this.id=="TJ"){
+						document.getElementById(y).innerHTML = "*TJの後に数字を入力してください"
+					 }
+
 					if(z<=2) {
 								this.id = "TJ";
-					document.getElementById(y).innerHTML = "*空欄不可"
+					//document.getElementById(y).innerHTML = "*空欄不可"
 						}else{
 							let	q=x.substring(2,7);
 							let p=x.substring(0,2);
@@ -209,16 +264,18 @@ export default{
 										let	w="TJ"+x;
 										this.id=w
 							}
-
-									//console.log(q);
+						console.log(this.id);
 					 	if((/[\u2E80-\uFE4F]+/).test(q)||(/[\uff61-\uff9f]+/).test(q)||(/[\u0000-\u002F\u003A-\u00ff]+/).test(q)||(/[\u00A4-\uFFE5]+/).test(x)){
 						 	document.getElementById(y).innerHTML = "*半角数字のみ"
+							 this.id=p+ q.toString().replace(/^0|[^\d]/g, '');
 						  	//console.log(y);
 						}else{
+						
 						if(z==7){
 							document.getElementById(y).innerHTML = ""
 						 }else{
-							document.getElementById(y).innerHTML = "*5桁を入力してください"
+									document.getElementById(y).innerHTML = "*数字を5桁入力してください"
+							
 						 }
 						
 					 } 
@@ -257,11 +314,127 @@ export default{
 						document.getElementById(y).innerHTML = ""
 						} 
 
-					}	 
+					}	
+					
+					
 				}
 		 	}
-		}
+			 ,//シーンをクリックする時の表示
+			 click_scene(){
+			
+			
+				var l=getMousePos().x-50;
+				var t=getMousePos().y-50;
+				//ポイントの実例化
+				var div = document.createElement("div");
+				div.className="point";
+				div.id="point";  
+				div.style.width="100px"; 
+				div.style.height="100px"; 
+				div.style.position="absolute";
+				//位置設定
+				div.style.marginLeft=l+"px"; 
+				div.style.marginTop=t+"px"; 
+				div.style.backgroundRepeat="no-repeat"; 
+				//urlはホームページのフォルダに探して
+				// div.style.backgroundImage='url(http://localhost:8090/static/img/point.9c42c43.png)' 
+				div.style.backgroundImage='url(http://localhost:8090/static/img/ink.ff56099.png)' 
+				//  div.style.backgroundImage='url(http://localhost:8090/static/img/flower.1ceb36a.png )' 
+				div.style.backgroundSize="100%";
+				div.style.zIndex=1008;
+				
+				// div.style.opacity=0.9;
+					//アニメーション
+					div.animate({
+						opacity:0,
+						transform:'rotate(90deg)',
+					}, 500);
+					
+					
+
+
+					var ll=getMousePos().x-25;
+					var tt=getMousePos().y-25;
+					//ランダム0~5	
+					var q=Math.floor(Math.random()*6); 
+					var pto_url;
+					//この方法で写真は必ず＞10kb
+					if(q==0){
+						pto_url='http://localhost:8090/static/img/t1.8c34787.png'
+					};
+					if(q==1){
+						pto_url='http://localhost:8090/static/img/t2.a6b908c.png'
+					};
+					if(q==2){
+						pto_url='http://localhost:8090/static/img/t3.15cfb6c.png'
+					};
+					if(q==3){
+						pto_url='http://localhost:8090/static/img/t4.2a44dc7.png'
+					};
+					if(q==4){
+						pto_url='http://localhost:8090/static/img/t5.4178a31.png'	
+					};
+					if(q==5){
+						pto_url='http://localhost:8090/static/img/t6.e9f2477.png'
+					};
+					var div_word = document.createElement("div");
+					div_word.className="word";
+					div_word.id="word";  
+					div_word.style.width="50px"; 
+					div_word.style.height="50px"; 
+					div_word.style.position="absolute";
+					//位置設定
+					div_word.style.marginLeft=ll+"px"; 
+					div_word.style.marginTop=tt+"px"; 
+					div_word.style.backgroundRepeat="no-repeat"; 
+					//urlはホームページのフォルダに探して
+					div_word.style.backgroundImage='url('+pto_url+')' 
+					div_word.style.backgroundSize="100%";
+					div_word.style.zIndex=1009;
+					div_word.style.opacity=0,
+				
+					//アニメーション
+
+				div_word.animate({
+						opacity:1,
+					}, 500);
+	
+				
+				//時間遅延
+				setTimeout(() => {
+					div.style.display="none";
+				
+			 }, 500);
+					
+			 	//時間遅延
+				 setTimeout(() => {
+					
+					div_word.style.display="none";
+			 }, 600);
+
+			 //画面変わるバグ防止
+			 if(this.click_btn==true){
+				document.getElementById("add").appendChild(div);
+				setTimeout(() => {
+				   document.getElementById("add").appendChild(div_word);
+			}, 200);
+			 }
+			
+
+			},
+
+		},
+
+
 	}
-
-
-
+	
+	
+	function  getMousePos(event) {
+		var e = event || window.event;
+		var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+		var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+		var x = e.pageX || e.clientX + scrollX;
+		var y = e.pageY || e.clientY + scrollY;
+		//alert('x: ' + x + '\ny: ' + y);
+		return { 'x': x, 'y': y };
+	}

@@ -17,16 +17,29 @@ export default{
 			bonus_date:'',
 			regInfo:{},
 			disabled:true,
+			click_btn:true,
 			}	
 		},
 		methods:{
 		jump(){
-         	this.$router.push('/home');
+			this.click_btn=false;
+            setTimeout(() => {
+                this.$router.push('/home');
+         }, 100);
 		},
-	  	edit(){
-			localStorage.removeItem('Authorization');
-          	this.$router.push('/');
-     	},
+		edit(){
+			this.click_btn=false;
+			document.getElementById("door_close").style.display="block";
+
+				//時間遅延
+									setTimeout(() => {
+					//console.log(res);
+					localStorage.removeItem('Authorization');
+					this.$router.push('/');
+				 }, 1200);
+
+			
+			},
 	  	  		  
   		stringChange(word){
                 var tt = word.toString().trim();
@@ -64,6 +77,7 @@ export default{
 							type: 'success',
 							message: '更新された'
 							}); 
+							this.click_btn=false;
 							//	alert("更新された");
 							this.$router.push("/home")
 							break;
@@ -144,7 +158,108 @@ export default{
 					 } 
 				 	}
 				}
+			 },
+
+			 	//シーンをクリックする時の表示
+				 click_scene(){
+			
+			
+					var l=getMousePos().x-50;
+					var t=getMousePos().y-50;
+					//ポイントの実例化
+					var div = document.createElement("div");
+					div.className="point";
+					div.id="point";  
+					div.style.width="100px"; 
+					div.style.height="100px"; 
+					div.style.position="absolute";
+					//位置設定
+					div.style.marginLeft=l+"px"; 
+					div.style.marginTop=t+"px"; 
+					div.style.backgroundRepeat="no-repeat"; 
+					//urlはホームページのフォルダに探して
+					// div.style.backgroundImage='url(http://localhost:8090/static/img/point.9c42c43.png)' 
+					div.style.backgroundImage='url(http://localhost:8090/static/img/ink.ff56099.png)' 
+					//  div.style.backgroundImage='url(http://localhost:8090/static/img/flower.1ceb36a.png )' 
+					div.style.backgroundSize="100%";
+					div.style.zIndex=1008;
+					
+					// div.style.opacity=0.9;
+						//アニメーション
+						div.animate({
+							opacity:0,
+							transform:'rotate(90deg)',
+						}, 500);
+											
+		
+						var ll=getMousePos().x-25;
+						var tt=getMousePos().y-25;
+						//ランダム0~5	
+						var q=Math.floor(Math.random()*6); 
+						var pto_url;
+						//この方法で写真は必ず＞10kb
+						if(q==0){
+							pto_url='http://localhost:8090/static/img/t1.8c34787.png'
+						};
+						if(q==1){
+							pto_url='http://localhost:8090/static/img/t2.a6b908c.png'
+						};
+						if(q==2){
+							pto_url='http://localhost:8090/static/img/t3.15cfb6c.png'
+						};
+						if(q==3){
+							pto_url='http://localhost:8090/static/img/t4.2a44dc7.png'
+						};
+						if(q==4){
+							pto_url='http://localhost:8090/static/img/t5.4178a31.png'	
+						};
+						if(q==5){
+							pto_url='http://localhost:8090/static/img/t6.e9f2477.png'
+						};
+						var div_word = document.createElement("div");
+						div_word.className="word";
+						div_word.id="word";  
+						div_word.style.width="50px"; 
+						div_word.style.height="50px"; 
+						div_word.style.position="absolute";
+						//位置設定
+						div_word.style.marginLeft=ll+"px"; 
+						div_word.style.marginTop=tt+"px"; 
+						div_word.style.backgroundRepeat="no-repeat"; 
+						//urlはホームページのフォルダに探して
+						div_word.style.backgroundImage='url('+pto_url+')' 
+						div_word.style.backgroundSize="100%";
+						div_word.style.zIndex=1009;
+						div_word.style.opacity=0,
+					
+						//アニメーション
+	
+					div_word.animate({
+							opacity:1,
+						}, 500);
+		
+					
+					//時間遅延
+					setTimeout(() => {
+						div.style.display="none";
+					
+				 }, 500);
+						
+					 //時間遅延
+					 setTimeout(() => {
+						
+						div_word.style.display="none";
+				 }, 1200);
+
+				 
+			 //画面変わるバグ防止
+			 if(this.click_btn==true){
+				document.getElementById("change").appendChild(div);
+				setTimeout(() => {
+				   document.getElementById("change").appendChild(div_word);
+			}, 200);
 			 }
+				},
 		},
         //进入页面加载的方法
         created(){
@@ -158,9 +273,26 @@ export default{
 			if(this.get_cre!=""){
 					this.disabled=false;
 			}
+
+
+
+						
+			//時間遅延
+			setTimeout(() => {
+				document.getElementById("cloud").style.display="none";
+			   // console.log(document.getElementById("door").style.display);
+			 }, 600);
         }
 
 	}
 
-
+	function  getMousePos(event) {
+		var e = event || window.event;
+		var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+		var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+		var x = e.pageX || e.clientX + scrollX;
+		var y = e.pageY || e.clientY + scrollY;
+		//alert('x: ' + x + '\ny: ' + y);
+		return { 'x': x, 'y': y };
+	}
 

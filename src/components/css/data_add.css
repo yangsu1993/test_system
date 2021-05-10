@@ -9,15 +9,22 @@
         /* opacity: 0.7; */
     }
             
+
     
-        .user_login_box{
+    .top_bar{
+        width: 100%;
+        height: 100%;
+        position:absolute;
+    }
+    
+        .add_box{
         background:  white url("../../assets/frame.png") no-repeat;
         background-size:  100%;
          /* box-shadow:10px 10px 10px gray; */
         width: 1200px;
         height: 652px;
-        position:relative;
-        
+        position: absolute;
+        top:200px;
         left: 350px;
         font-size: 25px;
         }
@@ -82,6 +89,7 @@
         /* left: 200px; */
         top: 450px;
         left: 800px;
+        cursor:pointer
     }
     
     
@@ -95,7 +103,9 @@
         border:none;
         color: white;
         text-shadow:-5px -5px 5px rgb(139, 6, 6);
-    
+        cursor:pointer;
+        position: absolute;
+        top: 100px;
     }
     
     .btn:hover,.jbtn:hover{
@@ -116,6 +126,7 @@
         /* left: 200px; */
         top: 200px;
         left: 0px;
+        cursor:pointer
     }
     
     .btn:hover,.jbtn:hover{
@@ -178,4 +189,225 @@
     
     }
     
+/* ロゴマーク */
+
+.company_logo{
+	width: 430px;
+	height: 60px;
+	background:white ;
+	opacity: 0.9;
+	position:absolute;
+	bottom: 0px;
+	right: 0px;
+
+}
+
+.c_mark{
+	width: 50px;
+	height: 50px;
+	background:   url("../../assets/logo.png") no-repeat;
+	background-size:  100%;
+	position:relative;
+	top: 3px;
+  
+}
+.c_name{
+	font-size: 30px;
+	position:absolute;
+	top: 0px;
+	left: 60px;
+}
+
+.c_Tel{
+	position:absolute;
+	bottom: 0px;
+	left: 60px;
+}    
+
+
+
+		/* 　門を閉まる */
+        .door_close{
+            width: 1900px;
+            height: 950px;
+            z-index:1000;
+            /* url("../../assets/bagua.png")  */
+            overflow:hidden; 
+            background-size:  100%;
+            position:absolute;
+            top: 0px;
+            /* left: 660px; */
+            display:none;
+            /* animation:door_css 3s   */
+        }
     
+    
+    
+        .door_l_close{
+            width: 50%;
+            height: 100%;
+            background: white;
+            
+            
+            position:absolute;
+            left: 0%;
+            
+    
+            animation:l_open_close 0.5s linear;
+            animation-fill-mode :forwards
+        }
+    
+        @keyframes l_open_close{
+            from{  left: -50%;}
+            to{  left: 0%; }
+            }
+    
+    
+    
+        .door_r_close{
+            width: 50%;
+            height: 100%;
+            background: white;
+            position:absolute;
+            right:0%;
+            animation:r_close 0.5s linear;
+            animation-fill-mode :forwards
+        }
+    
+        @keyframes r_close{
+            from{  right: -50%;}
+            to{  right: 0%; }
+            }
+    
+    
+        .door_lock_close{
+            z-index:1003;
+            width: 400px;
+            height: 400px;
+            background:  url("../../assets/lock.png") no-repeat;
+            background-size:  100%;
+            position:absolute;
+            right:-200px;
+            top: 275px;
+            animation:lock_close 0.4s linear ;
+            animation-delay:0.5s;
+            animation-fill-mode :forwards
+        }
+    
+        @keyframes lock_close{
+            from{transform:rotate(90deg)}
+            to{transform:rotate(0)}
+            }
+    
+        .door_key_close{
+            z-index:1004;
+            width: 150px;
+            height: 150px;
+            background: url("../../assets/bagua.png") no-repeat;
+            background-size:  100%;
+            position:absolute;
+            left:-75px;
+            top: 400px;
+        
+            animation:key_close 0.3s linear ;
+            animation-delay:0.9s;
+            animation-fill-mode :forwards
+        }
+    
+        @keyframes key_close{
+            from{transform:rotate(0)}
+            to{transform:rotate(360deg)}
+            }
+    
+
+
+            .door_l_photo1{
+                width: 500px;
+                height: 500px;
+                background: url("../../assets/he.png") no-repeat;
+                background-size:  100%;
+                position:absolute;
+                right: 30%;
+                top: 30%;
+                transform: rotateY(180deg)
+            }
+        
+            .door_l_photo2{
+                width: 180px;
+                height: 900px;
+                background: url("../../assets/left_word.png") no-repeat;
+                background-size:  100%;
+                position:absolute;
+                right: 10%;
+                top: 10%;
+                
+            }
+        
+            
+            .door_r_photo1{
+                width: 500px;
+                height: 500px;
+                background: url("../../assets/he.png") no-repeat;
+                background-size:  100%;
+                position:absolute;
+                left: 30%;
+                top: 30%;
+        
+            }
+        
+            .door_r_photo2{
+                width: 200px;
+                height: 900px;
+                background: url("../../assets/right_word.png") no-repeat;
+                background-size:  100%;
+                position:absolute;
+                left: 10%;
+                top: 10%;
+                
+            }
+
+
+
+            
+.cloud{
+    z-index:1000;
+    width:1900px;
+    height:950px ;
+    overflow:hidden; 
+    display:block;
+ 
+    position: absolute;
+	
+	animation:disappear 0.3s linear ;
+	animation-delay:0.3s;
+	animation-fill-mode:both;
+ }
+
+ 
+ @keyframes disappear{
+	from{ opacity: 1;}
+	to{opacity: 0;}
+}
+
+
+.cloud_photo{
+
+    width:150%;
+    height:150%;
+    background:  url("../../assets/cloud2.png") no-repeat;
+	background-size:  100%;
+    position: absolute;
+    top: -30%;
+    left: 0%;
+
+    animation:cloud_right 0.6s linear ;
+	animation-fill-mode:both
+ }
+
+ @keyframes cloud_right{
+     from{ left: -50%;}
+     to{left: 50%;}
+
+     
+ }
+            

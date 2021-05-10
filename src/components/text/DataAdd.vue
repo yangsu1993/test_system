@@ -1,15 +1,21 @@
 <template>
-		<div class="background">
+		<div id="add" class="background"  @click ="click_scene()">
     	<!-- タイトル -->
 		<header class="top_bar">
 		    <a onclick="window.history.go(-1)" class="icon_back"></a>
 		    <h3 class="cartname">社員情報新規</h3>
 			<button @click="jump()" class="jbtn">戻る</button>
 			<button @click="edit()" class="ebtn">ログアウト</button>
+				<div class="company_logo">
+				<div class="c_mark"></div>
+				<div class="c_name"> 株式会社天時情報システム</div>
+				<div class="c_Tel"> TEL:03-5913-7230　　FAX:03-5913-7231</div>
+				<!-- <div class="test"></div> -->
+			</div>
 		</header>
 
 		<!-- 社員データ新規 -->
-		<main class="user_login_box">
+		<main class="add_box">
 		    <div class="login_dialog">
 				
 				<!-- 左側のデータ -->
@@ -20,7 +26,7 @@
 		        <input type="text" name="id"  placeholder="数字とアルファベットのみ" class="id" v-on:input="check_word($event)" v-model="id"  maxlength="7" >
 		        </div>
 				<!-- 社員番号　警告枠 -->
-				<p id="id" class="id_t"></p>
+				<p id="id" class="id_t">*TJの後に数字を入力してください</p>
 				<div style="margin-top:10%;"></div>
 
 				<!-- 名前：1-15桁 -->
@@ -29,7 +35,7 @@
 		         <input type="text" name="names" placeholder="漢字とひらがな/アルファベット" class="names" v-model="names"  v-on:input="check_word($event)" maxlength="15">
 		       	</div>
 				<!-- 社員番号　警告枠 -->   
-				<p id="names" class="names_t"></p>	
+				<p id="names" class="names_t">*空欄不可</p>	
 				<div style="margin-top:10%;"></div>
 
 				<!-- ふりがな：1-15桁 -->
@@ -38,7 +44,7 @@
 		        <input type="text" name="name_furigana" placeholder="カタカナ(15位以内)" class="name_furigana" v-on:input="check_word($event)" v-model="name_furigana" maxlength="15">
 				</div>
 				<!-- ふりがな　警告枠 --> 
-				<p id="name_furigana" class="furigana_t"></p>	
+				<p id="name_furigana" class="furigana_t">*空欄不可</p>	
 				<div style="margin-top:10%;"></div>
 						
 				<!-- 入社年月日：yyyy-mm-dd -->		
@@ -51,6 +57,7 @@
 								type="date"
 								placeholder="日付を選択"
 								format="yyyy-MM-dd"
+								v-on:input="join_check()"
 								:picker-options="pickerOptions">
 				</el-date-picker>
 				</div>
@@ -106,6 +113,23 @@
 		        </div>	
 		    </div>
 		</main>
+
+		<div class="cloud" id="cloud">
+			<div class="cloud_photo"></div>
+		</div>
+
+		<div class="door_close" id="door_close">
+			<div class="door_l_close">
+                        <div  class="door_l_photo1"></div>
+                        <div  class="door_l_photo2"></div>
+                        <div  class="door_lock_close"></div>
+                  </div>
+			<div class="door_r_close">
+                         <div  class="door_r_photo1"></div>
+                        <div  class="door_r_photo2"></div>
+                         <div  class="door_key_close"></div>
+                  </div>
+		</div>
 	</div>
 </template>
 

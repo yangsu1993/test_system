@@ -28,6 +28,7 @@ new Vue({
 
 
 // 添加请求拦截器，在请求头中加token
+//tokenを増加
 axios.interceptors.request.use(
   config => {
     if (localStorage.getItem('Authorization')) {
@@ -45,6 +46,7 @@ axios.interceptors.request.use(
 
 new Vue({
   //这里要配置store
+  //storeを設置
 router, store:store,
 render: function (h) { return h(App) }
 }).$mount('#app')

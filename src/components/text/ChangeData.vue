@@ -1,15 +1,21 @@
 <template>
-		<div class="background">
+		<div  id="change" class="background"  @click ="click_scene()">
 			<!-- タイトル -->	
 		<header class="top_bar">
 		    <a onclick="window.history.go(-1)" class="icon_back"></a>
 		    <h3 class="cartname">社員情報新規</h3>
 			<button @click="jump()" class="jbtn">戻る</button>
 			<button @click="edit()" class="ebtn">ログアウト</button>
+			<div class="company_logo">
+				<div class="c_mark"></div>
+				<div class="c_name"> 株式会社天時情報システム</div>
+				<div class="c_Tel"> TEL:03-5913-7230　　FAX:03-5913-7231</div>
+				<!-- <div class="test"></div> -->
+			</div>
 		</header>
 
 		<!-- 社員データ修正 -->
-		<main class="user_login_box">	
+		<main class="change_box">	
 		    <div class="login_dialog">
 
 				<!-- 左側のデータ -->
@@ -106,6 +112,23 @@
 		        </div>
 		    </div>
 		</main>
+
+		<div class="cloud" id="cloud">
+			<div class="cloud_photo"></div>
+		</div>
+
+		<div class="door_close" id="door_close">
+			<div class="door_l_close">
+                    <div  class="door_l_photo1"></div>
+                    <div  class="door_l_photo2"></div>
+                    <div  class="door_lock_close"></div>
+             </div>
+			<div class="door_r_close">
+                    <div  class="door_r_photo1"></div>
+                    <div  class="door_r_photo2"></div>
+                    <div  class="door_key_close"></div>
+            </div>
+		</div>
 	</div>
 </template>
 
