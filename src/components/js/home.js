@@ -238,6 +238,7 @@ export default {
               div.style.marginLeft=l+"px"; 
               div.style.marginTop=t+"px"; 
               div.style.backgroundRepeat="no-repeat"; 
+              div.style.pointerEvents="none";
               //urlはホームページのフォルダに探して
               // div.style.backgroundImage='url(http://localhost:8090/static/img/point.9c42c43.png)' 
               div.style.backgroundImage='url(http://localhost:8090/static/img/ink.ff56099.png)' 
@@ -294,6 +295,7 @@ export default {
                 div_word.style.backgroundSize="100%";
                 div_word.style.zIndex=1009;
                 div_word.style.opacity=0,
+                div_word.style.pointerEvents="none";
               
                 //アニメーション
       

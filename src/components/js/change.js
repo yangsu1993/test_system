@@ -50,13 +50,14 @@ export default{
 		
 	
 		pushIn(){
+			
 				const self = this;
 					if(self.id!=0 && self.names!=0 && self.name_furigana!=0 && self.join_date!=null){
 					if(self.get_cre!=0&&self.cre_date!=0 || self.get_cre==0&&self.cre_date==0){
 					
 					if(self.cre_date==null){self.cre_date=""}
 					if(self.bonus_date==null){self.bonus_date=""}
-													
+					this.click_btn=false;						
 					self.$axios({
 						method:'post',
 						url: '/api/user/update',
@@ -71,15 +72,19 @@ export default{
 						}
 					})
 					.then( res => {
+						
 						switch(res.data){
 						case 0:
 							this.$message({
 							type: 'success',
 							message: '更新された'
 							}); 
-							this.click_btn=false;
-							//	alert("更新された");
-							this.$router.push("/home")
+						
+						
+								this.$router.push("/home")
+					
+		
+							
 							break;
 						}
 					})
@@ -130,33 +135,63 @@ export default{
 
 			
 		check_word(n){
-			//提示栏内容
-			var y = n.currentTarget.name;
-			//输入栏内容
-			var x =  n.currentTarget.value;
+				//提示栏内容
+				var y = n.currentTarget.name;
+				//输入栏内容
+				var x =  n.currentTarget.value;
+				//获取输入长度
+				var z = x.length;
+
 			 if(x==""){ document.getElementById(y).innerHTML = "*空欄不可"}else{
 
 				if(y=="names"){
-					console.log((/\u0000-\u00ff]+/).test(x));
-					//非半角+非片假名+非各种字符+非小写全角英文
-					 if((/[\u0000-\u00ff]+/).test(x)||(/[\u30A1-\u3229]+/).test(x)||(/[\u3000-\u3017]+/).test(x)
-					 ||(/[\uFF01-\uFF20]+/).test(x)||(/[\uFF3B-\uFFE5]+/).test(x)){
-						document.getElementById(y).innerHTML = "*半角・記号・カタカナ・こもじ英文不可"
-					 }else{
-						document.getElementById(y).innerHTML = ""
-					 } 
-				 }
+					//非半角假名+非半角+非片假名+非各种字符+非小写全角英文
+				 if(z==0){
+					 document.getElementById(y).innerHTML = "*空欄不可"
+				 }else{
+					 if((/[\uff61-\uff9f]+/).test(x)||(/[\u0000-\u00ff]+/).test(x)||(/[\u30A1-\u3229]+/).test(x)||(/[\u3001-\u3017]+/).test(x)||(/[\uFF01-\uFF20]+/).test(x)||(/[\uFF3B-\uFFE5]+/).test(x)){
+					  document.getElementById(y).innerHTML = "*半角・記号・カタカナ・こもじ英文不可"
+				 
+				 }else{
+					 //大写英文全角或者汉字加平假名
+					 if((/[\uFF21-\uFF3A]+/).test(x)&&(/[\u3041-\u9FA0]+/).test(x)){
+					 document.getElementById(y).innerHTML = "*おおもじ英文のみ/漢字とひらがな"
+				 }else{
+					 // console.log(this.stringChange(this.names));
+					 //只有汉字加平假名
+					 //中に、１つスペースが必須
+					 if((/[\u3000]+/).test(this.stringChange(this.names))){
+						 document.getElementById(y).innerHTML = ""	
 
-				if(y=="name_furigana"){
-					console.log((/\u0000-\u00ff]+/).test(x));
-					//カタカナのみ
-					if((/[\u0000-\u00ff]+/).test(x)||(/[\u00A4 -\u3093]+/).test(x)||(/[\u3105-\uFFE5]+/).test(x)
-					){
-						 document.getElementById(y).innerHTML = "*半角・記号・平仮名・漢字不可"
 					 }else{
-						 document.getElementById(y).innerHTML = ""
-					 } 
-				 	}
+						 document.getElementById(y).innerHTML = "*姓と名の間に(全角)スペースを入力してください"
+					 }
+					 
+				  }
+				  } 
+			 }		
+		  }
+
+					if(y=="name_furigana"){
+						//カタカナのみ
+						if(z==0){
+							document.getElementById(y).innerHTML = "*空欄不可"
+						}else{
+							if((/[\u0000-\u00ff]+/).test(x)||(/[\u00A4 -\u2642\u3001-\u3093]+/).test(x)||(/[\u3105-\uFFE5]+/).test(x)||(/[\uff61-\uff9f]+/).test(x)
+						){
+						document.getElementById(y).innerHTML = "*半角・記号・平仮名・漢字不可"
+						//console.log(y);
+						}else{
+
+							if((/[\u3000]+/).test(this.stringChange(this.name_furigana))){
+						document.getElementById(y).innerHTML = ""
+							}else{
+								document.getElementById(y).innerHTML = "*姓と名の間に(全角)スペースを入力してください"
+							}
+						} 
+
+					}	
+				}
 				}
 			 },
 
@@ -177,6 +212,7 @@ export default{
 					div.style.marginLeft=l+"px"; 
 					div.style.marginTop=t+"px"; 
 					div.style.backgroundRepeat="no-repeat"; 
+					div.style.pointerEvents="none";
 					//urlはホームページのフォルダに探して
 					// div.style.backgroundImage='url(http://localhost:8090/static/img/point.9c42c43.png)' 
 					div.style.backgroundImage='url(http://localhost:8090/static/img/ink.ff56099.png)' 
@@ -231,6 +267,7 @@ export default{
 						div_word.style.backgroundSize="100%";
 						div_word.style.zIndex=1009;
 						div_word.style.opacity=0,
+						div_word.style.pointerEvents="none";
 					
 						//アニメーション
 	

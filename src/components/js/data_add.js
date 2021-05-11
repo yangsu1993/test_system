@@ -88,7 +88,7 @@ export default{
 			
 			pushIn(){
 				const self = this;
-			
+				
 				// if(self.id.length<=2 || self.names!="" || self.name_furigana!="" || self.join_date!=null){
 				if(self.get_cre!=""&&self.cre_date!="" || self.get_cre==""&&self.cre_date==""){
 				//ユーザーidの半角判断(半角+非全角+非全角字符)
@@ -100,7 +100,7 @@ export default{
 							//仮名の判断	
 					if(document.getElementById("name_furigana").innerHTML == ""){
 
-	
+						this.click_btn=false;
 						self.$axios({
 						method:'post',
 						url: '/api/user/push',
@@ -122,7 +122,7 @@ export default{
 											type: 'success',
 											message: '新規された'
 											}); 
-											this.click_btn=false;
+											
 												//時間遅延
 											setTimeout(() => {
 													this.$router.push("/home")
@@ -178,23 +178,7 @@ export default{
 				}else{
 					document.getElementById("cre_date").innerHTML = "*空欄不可";
 				}			
-				// }else{
-				// 	console.log(this.id);
-				// 	if(self.join_date==null){
-				// 	document.getElementById("join_date").innerHTML = "*空欄不可"
-				// 	}
-				// 	if(self.id.length<=2){
-				// 	console.log(self.id.length);
-				// 	document.getElementById("id").innerHTML = "*空欄不可"
-				// 	}
-				// 	if(self.names==0){
-				// 	document.getElementById("names").innerHTML = "*空欄不可"
-				// 	}
-				// 	if(self.name_furigana==0){
-				// 	document.getElementById("name_furigana").innerHTML = "*空欄不可"
-				// 	}
-				
-				// }
+			
 				
 			},
 				//资格
@@ -245,6 +229,8 @@ export default{
 					var x =  n.currentTarget.value;
 					//获取输入长度
 					var z = x.length;
+					let	q=x.substring(2,7);
+					let p=x.substring(0,2);
 
 					if(y=="id"){	
 					//保留前两位
@@ -252,20 +238,37 @@ export default{
 						document.getElementById(y).innerHTML = "*TJの後に数字を入力してください"
 					 }
 
-					if(z<=2) {
-								this.id = "TJ";
-					//document.getElementById(y).innerHTML = "*空欄不可"
-						}else{
-							let	q=x.substring(2,7);
-							let p=x.substring(0,2);
-									//如果前面没有TJ就加上判断 有就直接判断
-									// もし前にTJがなければ、TJを前に増加
-								if(p!="TJ"){
-										let	w="TJ"+x;
-										this.id=w
+					if(this.id.substring(0,2)!= "TJ") {
+					if((/[\u2E80-\uFE4F]+/).test(x)||(/[\uff61-\uff9f]+/).test(x)||(/[\u0000-\u002F\u003A-\u00ff]+/).test(x)||(/[\u00A4-\uFFE5]+/).test(x)){
+							this.id = "TJ";
+							
+						}	else{
+							if(this.id=="T"){
+								this.id = "TJ"
+							}else{
+								this.id = "TJ"+this.id;
+								let s=this.id.length;
+							
+								if(s==7){
+									document.getElementById(y).innerHTML = ""
+								 }
+								  if(s>7){
+									this.id = this.id.substring(0,7);
+								 }
+								 if(s<7){
+											document.getElementById(y).innerHTML = "*数字を5桁入力してください"
+									
+								 }
 							}
-						console.log(this.id);
-					 	if((/[\u2E80-\uFE4F]+/).test(q)||(/[\uff61-\uff9f]+/).test(q)||(/[\u0000-\u002F\u003A-\u00ff]+/).test(q)||(/[\u00A4-\uFFE5]+/).test(x)){
+							
+							
+						}
+							}else{
+						
+								
+							
+					
+					 	if((/[\u2E80-\uFE4F]+/).test(q)||(/[\uff61-\uff9f]+/).test(q)||(/[\u0000-\u002F\u003A-\u00ff]+/).test(q)||(/[\u00A4-\uFFE5]+/).test(q)){
 						 	document.getElementById(y).innerHTML = "*半角数字のみ"
 							 this.id=p+ q.toString().replace(/^0|[^\d]/g, '');
 						  	//console.log(y);
@@ -294,8 +297,16 @@ export default{
 							if((/[\uFF21-\uFF3A]+/).test(x)&&(/[\u3041-\u9FA0]+/).test(x)){
 							document.getElementById(y).innerHTML = "*おおもじ英文のみ/漢字とひらがな"
 						}else{
+							// console.log(this.stringChange(this.names));
 							//只有汉字加平假名
-							document.getElementById(y).innerHTML = ""	
+							//中に、１つスペースが必須
+							if((/[\u3000]+/).test(this.stringChange(this.names))){
+								document.getElementById(y).innerHTML = ""	
+
+							}else{
+								document.getElementById(y).innerHTML = "*姓と名の間に(全角)スペースを入力してください"
+							}
+							
 						 }
 					 	} 
 					}		
@@ -311,12 +322,15 @@ export default{
 						document.getElementById(y).innerHTML = "*半角・記号・平仮名・漢字不可"
 						  //console.log(y);
 					 	}else{
+
+							if((/[\u3000]+/).test(this.stringChange(this.name_furigana))){
 						document.getElementById(y).innerHTML = ""
+							}else{
+								document.getElementById(y).innerHTML = "*姓と名の間に(全角)スペースを入力してください"
+							}
 						} 
 
 					}	
-					
-					
 				}
 		 	}
 			 ,//シーンをクリックする時の表示
@@ -336,10 +350,11 @@ export default{
 				div.style.marginLeft=l+"px"; 
 				div.style.marginTop=t+"px"; 
 				div.style.backgroundRepeat="no-repeat"; 
+				div.style.pointerEvents="none";
 				//urlはホームページのフォルダに探して
-				// div.style.backgroundImage='url(http://localhost:8090/static/img/point.9c42c43.png)' 
+		
 				div.style.backgroundImage='url(http://localhost:8090/static/img/ink.ff56099.png)' 
-				//  div.style.backgroundImage='url(http://localhost:8090/static/img/flower.1ceb36a.png )' 
+
 				div.style.backgroundSize="100%";
 				div.style.zIndex=1008;
 				
@@ -392,6 +407,7 @@ export default{
 					div_word.style.backgroundSize="100%";
 					div_word.style.zIndex=1009;
 					div_word.style.opacity=0,
+					div_word.style.pointerEvents="none";
 				
 					//アニメーション
 

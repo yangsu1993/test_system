@@ -6,6 +6,7 @@
    
 	background: white url("../../assets/yun.png") repeat;
     position: absolute;
+	overflow:hidden; 
 	/* opacity: 0.7; */
 }
 
